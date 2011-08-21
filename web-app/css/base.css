@@ -1,0 +1,144 @@
+* {margin:0;padding:0;} 
+html, body, #wrap {height: 100%;}
+body > #wrap {height: auto; min-height: 100%;}
+#main {padding-bottom: 50px;}
+#footer {position: relative;
+	margin-top: -50px;
+	height: 50px;
+	clear:both;} 
+.clearfix:after {content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;}
+.clearfix {display: inline-block;}
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+
+/* Layout */
+
+body{
+	background: #e9e9ce url(../images/bg.gif) repeat-x top;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:62.5%;
+	color: #333;
+}
+
+#header{
+	height: 90px;
+	border-bottom: 5px solid #f93;
+}
+
+#content{
+	padding: 10px;
+}
+.floatLeft{
+	float: left;
+}
+
+.floatRight{
+	float: right;
+}
+
+/* Typography 
+h1{
+	height:70px;width:220px;
+	background: url(../images/logo.png) no-repeat top left;
+	text-indent:-1000px;
+	float: left;
+	margin: 10px;
+}
+*/
+h2{
+	font-weight: normal;
+	font-size: 2em;
+	padding-bottom: 1em;
+}
+
+h3{
+	font-weight: normal;
+	font-size: 1.8em;
+	text-align:center;
+	padding-bottom: 1em;
+}
+
+h4{
+	font-weight: normal;
+	font-size: 1.8em;
+	text-align:left;
+	padding-bottom: 1em;
+}
+
+h5{
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+h6{
+	font-weight: bold;
+	font-style: italic;
+	font-size: 1.2em;
+}
+
+
+p{
+	font-size: 1.6em;
+	padding-bottom: 1em;
+}
+ol{
+	list-style: decimal;
+padding: 0 1em 2em 2em;
+}
+
+ul{
+list-style:square;	
+padding: 0 1em 2em 2em;
+}
+
+li{
+	font-size: 1.4em;
+	padding-left:1em;
+}
+
+dl{
+list-style:none;	
+padding: 0 1em 2em 0;
+}
+
+dl{
+font-size: 1.4em;
+	font-size: 1.4em;	
+	padding-left:0em
+}
+
+dt{
+text-align:left;
+	padding-bottom: 1em;	
+	padding-left:0;
+	font-size: 1.3em;
+}
+
+dd{
+	padding-left: 2em;
+}
+
+.copyright{
+	float: right;
+	color: #999;
+	font-size: 1.2em;
+	padding-right: 10px;
+}
+
+/* .header{
+	display: block;
+	height:30px;
+	width: 450px;
+	float: right;
+	background: url(../images/proftest.png) no-repeat bottom right;
+	text-indent: -2000px;
+	margin: 50px 10px 0px 0;
+} */
+
+form ul, form li{
+	list-style: none;
+}
