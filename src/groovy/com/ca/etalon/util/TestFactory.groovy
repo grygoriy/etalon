@@ -26,19 +26,19 @@ import com.ca.etalon.tests.interestmap.IMQuestion
  * To change this template use File | Settings | File Templates.
  */
 
-public class TestFactory {
+class TestFactory {
 
-  public static TestProcess getTestProcessTamplate() {
+  static TestProcess getTestProcessTamplate() {
     TestProcess testProcess = new TestProcess()
     testProcess.imTest = getIMTest()
-    testProcess.actualTest = getActualTest()
-    testProcess.yovayshyTest = getYivayshyTest()
+    testProcess.actualTest = actualTest
+    testProcess.yovayshyTest = yivayshyTest
     return testProcess
   }
 
-  public static TestProcess updateWithExtraTest(TestProcess testProcess) {
-    testProcess.lidershipTest = getLidershipTest();
-    testProcess.motivationTest = getMotivationTest();
+  static TestProcess updateWithExtraTest(TestProcess testProcess) {
+    testProcess.lidershipTest = lidershipTest;
+    testProcess.motivationTest = motivationTest;
     return testProcess;
   }
 
@@ -58,21 +58,24 @@ public class TestFactory {
 
   private static YovayshyTest getYivayshyTest() {
     def questions = YovayshyQuestion.list()
-    def processedQuestions = questions.collect { new YovayshyProcessedQuestion(question:it, answer: isTestEnv() ? 1 : 0) }
+    def processedQuestions =
+                        questions.collect { new YovayshyProcessedQuestion(question:it, answer: isTestEnv() ? 1 : 0) }
 
     new YovayshyTest(processedQuestions:processedQuestions)
   }
 
   private static LidershipTest getLidershipTest() {
     def questions = LidershipQuestion.list();
-    def processQuestions = questions.collect {new LidersiProcessQuestion(lidershipQuestion:it, answer: isTestEnv() ? 1 : 0)}
+    def processQuestions =
+                    questions.collect {new LidersiProcessQuestion(lidershipQuestion:it, answer: isTestEnv() ? 1 : 0)}
 
     new LidershipTest(lidersiprocessQuestions:processQuestions)
   }
 
   private static MotivationTest getMotivationTest() {
     def questions = MotivationQuestion.list()
-    def processedQuestions = questions.collect { new MotivationProcessedQuestion(motivationQuestion:it, answer: isTestEnv() ? 1 : 0) }
+    def processedQuestions =
+            questions.collect { new MotivationProcessedQuestion(motivationQuestion:it, answer: isTestEnv() ? 1 : 0) }
 
     new MotivationTest(motivationProcessedQuestions:processedQuestions)
   }

@@ -7,7 +7,7 @@ package com.ca.etalon.test
  * To change this template use File | Settings | File Templates.
  */
 
-public class IdLabel {
+class IdLabel {
   Integer id
   String answer
 }

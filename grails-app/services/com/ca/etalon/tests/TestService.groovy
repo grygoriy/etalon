@@ -26,7 +26,7 @@ class TestService {
   boolean transactional = true
 
     def getTestTemplate() {
-      TestFactory.getTestProcessTamplate()
+      TestFactory.testProcessTamplate
     } 
 
     def extendTest(TestProcess testProcess) {
@@ -66,7 +66,7 @@ class TestService {
 
     private Integer getActualityResult(TestProcess process) {
       def result = 0;
-      def ceil = ActualTest.getActualityAnswers().size()
+      def ceil = ActualTest.actualityAnswers.size()
       process.actualTest.questions.each {
         result += it.question.isReverted ? revertAnswer(it.answer, ceil) : it.answer
       }
@@ -166,12 +166,14 @@ class TestService {
   private Set<HollandResult> getHollandResult(TestProcess process) {
     List<HollandQuestion> hollandQuestions = process.hollandQuestions
     Map<HollandType, Integer> result = [:]
-    result.put(HollandType.Realistic, 0)
-    result.put(HollandType.Artistic, 0)
-    result.put(HollandType.Investication, 0)
-    result.put(HollandType.Social, 0)
-    result.put(HollandType.Comerce, 0)
-    result.put(HollandType.Conventional, 0)
+      result.with {
+          put(HollandType.Realistic, 0)
+          put(HollandType.Artistic, 0)
+          put(HollandType.Investication, 0)
+          put(HollandType.Social, 0)
+          put(HollandType.Comerce, 0)
+          put(HollandType.Conventional, 0)
+      }
 
     hollandQuestions.each {
       Integer score = result.get(it.type)
@@ -179,7 +181,7 @@ class TestService {
       result.put(it.type, score)
     }
 
-    def hollandResults = result.entrySet().collect(new HashSet()) {new HollandResult(type:it.getKey(), score:it.getValue()).save()}
+    def hollandResults = result.entrySet().collect(new HashSet()){new HollandResult(type:it.key,score:it.value).save()}
     return hollandResults
   }
 
@@ -215,7 +217,7 @@ class TestService {
   }
 
   private YovayshyResult getYovayshyResult(TestProcess process) {
-    HashMap<YovayshySphere, Integer> score = [:]
+    Map<YovayshySphere, Integer> score = [:]
     YovayshySphere.each {score.put(it, 0)}
 
     YovayshyTest test = process.yovayshyTest

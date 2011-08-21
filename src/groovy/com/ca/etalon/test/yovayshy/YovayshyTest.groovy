@@ -8,7 +8,7 @@ package com.ca.etalon.test.yovayshy
  * To change this template use File | Settings | File Templates.
  */
 
-public class YovayshyTest {
+class YovayshyTest {
   List<YovayshyProcessedQuestion> processedQuestions
   String proffecionalSphere
   String proffecionalIntrests
@@ -25,21 +25,15 @@ public class YovayshyTest {
   }
 
   @SuppressWarnings('ExplicitHashSetInstantiation')
-  public static List<YovayshyAnswer> getAnswers() {
-    def answers = new ArrayList<YovayshyAnswer>()
-
-    for (YovayshyAnswer yovayshyAnswer : getYovayshyAnswerMap().values()) {
-      answers.add(yovayshyAnswer)
-    }
-
-    return answers
+  static List<YovayshyAnswer> getAnswers() {
+    yovayshyAnswerMap.values()
   }
 
-  public static YovayshyAnswer getAnswerById(Integer id) {
-    return getYovayshyAnswerMap().get(id)
+  static YovayshyAnswer getAnswerById(Integer id) {
+    return yovayshyAnswerMap.get(id)
   }
 
-  public boolean processErrors(String[] answers) {
+  boolean processErrors(String[] answers) {
     boolean hasErrors = false
     def i = 0
     processedQuestions.each { YovayshyProcessedQuestion item ->

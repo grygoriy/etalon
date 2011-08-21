@@ -5,7 +5,7 @@ import com.ca.etalon.test.IdLabel
 class IMTest {
   List<IMProcessedQuestion> processedQuestions
 
-  public boolean processErrors(String[] answers) {
+  boolean processErrors(String[] answers) {
     boolean hasErrors = false
     def i = 0
     processedQuestions.each { IMProcessedQuestion item ->

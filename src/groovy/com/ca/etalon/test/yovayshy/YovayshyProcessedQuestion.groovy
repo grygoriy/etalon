@@ -10,7 +10,7 @@ import com.ca.etalon.tests.yovayshy.YovayshyQuestion
  * To change this template use File | Settings | File Templates.
  */
 
-public class YovayshyProcessedQuestion {
+class YovayshyProcessedQuestion {
   YovayshyQuestion question
   int answer
   String errorMessage

@@ -7,7 +7,7 @@ package com.ca.etalon.test.yovayshy
  * To change this template use File | Settings | File Templates.
  */
 
-public class YovayshyAnswer {
+class YovayshyAnswer {
   Integer id
   String label
   Integer scoreA

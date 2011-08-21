@@ -10,7 +10,7 @@ import com.ca.etalon.test.IdLabel
  * To change this template use File | Settings | File Templates.
  */
 
-public class MotivationTest {
+class MotivationTest {
   List<MotivationProcessedQuestion> motivationProcessedQuestions
   Integer answer
   String speciality = ""
@@ -25,7 +25,7 @@ public class MotivationTest {
     ]
   }
 
-  public boolean processErrors(String[] answers) {
+  boolean processErrors(String[] answers) {
     boolean hasErrors = false
     def i = 0
     motivationProcessedQuestions.each { MotivationProcessedQuestion item ->

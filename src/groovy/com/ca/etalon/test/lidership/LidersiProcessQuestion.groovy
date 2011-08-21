@@ -10,7 +10,7 @@ import com.ca.etalon.tests.lidership.LidershipQuestion
  * To change this template use File | Settings | File Templates.
  */
 
-public class LidersiProcessQuestion {
+class LidersiProcessQuestion {
   LidershipQuestion lidershipQuestion;
   Integer answer;
   String errorMessage;

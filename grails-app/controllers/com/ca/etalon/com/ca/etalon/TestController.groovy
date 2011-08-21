@@ -10,7 +10,7 @@ import com.ca.etalon.test.holland.HollandVector
 class TestController {
 
   TestService testService
-  def defaultAction = "start"
+  def defaultAction = 'start'
 
   def start = {
     String name = "";
@@ -18,7 +18,7 @@ class TestController {
   }
 
   def submitInitials = {
-    def testProcess = testService.getTestTemplate()
+    def testProcess = testService.testTemplate
     session.test = testProcess;
     testProcess.userName = params.student
     def school = School.findById(params.schoolId)

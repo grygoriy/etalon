@@ -8,7 +8,7 @@ class School {
       name(nullable:false, blank:false)
     }
 
-    public String toString() {
+    String toString() {
       return name
     }
 

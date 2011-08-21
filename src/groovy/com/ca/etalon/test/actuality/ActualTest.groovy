@@ -7,7 +7,7 @@ class ActualTest {
 
   List<ActualProcessedQuestion> questions;
 
-  public boolean processErrors(String[] answers) {
+  boolean processErrors(String[] answers) {
     boolean hasErrors = false
     def i = 0
     questions.each { ActualProcessedQuestion item ->

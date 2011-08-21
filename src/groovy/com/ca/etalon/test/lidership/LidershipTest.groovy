@@ -8,6 +8,6 @@ package com.ca.etalon.test.lidership
  * To change this template use File | Settings | File Templates.
  */
 
-public class LidershipTest {
+class LidershipTest {
   List<LidersiProcessQuestion> lidersiprocessQuestions;
 }

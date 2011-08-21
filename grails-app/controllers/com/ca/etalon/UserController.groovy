@@ -2,7 +2,7 @@ package com.ca.etalon
 
 import grails.plugins.springsecurity.Secured
 
-@Secured(["ROLE_ADMINISTRATOR"])
+@Secured(['ROLE_ADMINISTRATOR'])
 @SuppressWarnings(['InvertedIfElse', 'EmptyIfStatement'])
 class UserController {
     
@@ -69,8 +69,8 @@ class UserController {
             if(params.version) {
                 def version = params.version.toLong()
                 if(userInstance.version > version) {
-                    
-                    userInstance.errors.rejectValue("version", "user.optimistic.locking.failure", "Another user has updated this User while you were editing.")
+
+                    userInstance.errors.rejectValue('version', 'user.optimistic.locking.failure", "Another user has updated this User while you were editing.')
                     render(view:'edit',model:[userInstance:userInstance])
                     return
                 }
@@ -96,7 +96,7 @@ class UserController {
     def create = {
         def userInstance = new User()
         userInstance.properties = params
-        return ['userInstance':userInstance]
+        ['userInstance':userInstance]
     }
 
     def save = {

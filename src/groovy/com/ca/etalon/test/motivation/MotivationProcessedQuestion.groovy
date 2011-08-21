@@ -10,7 +10,7 @@ import com.ca.etalon.tests.motivation.MotivationQuestion
  * To change this template use File | Settings | File Templates.
  */
 
-public class MotivationProcessedQuestion {
+class MotivationProcessedQuestion {
   MotivationQuestion motivationQuestion;
   Integer answer
   String errorMessage

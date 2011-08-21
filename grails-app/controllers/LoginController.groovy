@@ -8,6 +8,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
 
+@SuppressWarnings(['DuplicateStringLiteral', 'UnnecessaryGString'])
 class LoginController {
 
 	/**
