@@ -12,12 +12,12 @@ class SphereResult {
     }
 
     static mapping = {
-      table "SphereResult"
+      table 'SphereResult'
       columns {
-        id column:"SphereResultId"
-        sphere column:"SphereId", enumType:"string"
-        score column:"Score"
-        yovayshyResult column:"YovayshyResultId"
+        id column:'SphereResultId'
+        sphere column:'SphereId', enumType:'string'
+        score column:'Score'
+        yovayshyResult column:'YovayshyResultId'
       }
       version false
     }

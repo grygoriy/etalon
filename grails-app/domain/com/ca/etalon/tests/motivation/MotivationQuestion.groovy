@@ -11,11 +11,11 @@ class MotivationQuestion {
     }
 
     static mapping = {
-      table "MotivationQuestion"
+      table 'MotivationQuestion'
       columns {
-        id column:"MotivationQuestionId"
-        question column:"Question"
-        motivationVector column:"MotivationVector",  enumType:"string"
+        id column:'MotivationQuestionId'
+        question column:'Question'
+        motivationVector column:'MotivationVector',  enumType:'string'
       }
       version false
     }

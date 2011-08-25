@@ -12,12 +12,12 @@ class HollandResult {
     }
 
     static mapping = {
-      table "HollandResult"
+      table 'HollandResult'
       columns {
-        id column:"HollandResultId"
-        score column:"Score"
-        type column:"Type", enumType:"string"
-        testResults column:"TestResultsId"
+        id column:'HollandResultId'
+        score column:'Score'
+        type column:'Type', enumType:'string'
+        testResults column:'TestResultsId'
       }
       version false
     }

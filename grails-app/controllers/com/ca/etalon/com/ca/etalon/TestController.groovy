@@ -13,7 +13,7 @@ class TestController {
   def defaultAction = 'start'
 
   def start = {
-    String name = "";
+    String name = '';
     return [student:name]
   }
 
@@ -24,10 +24,10 @@ class TestController {
     def school = School.findById(params.schoolId)
     if (school != null) {
       testProcess.school = school
-      redirect(action:"interestsMap")
+      redirect(action:'interestsMap')
     } else {
-      flash.message = "Виберіть школу"
-      render(view:"start", model:[name:params.student])
+      flash.message = 'Виберіть школу'
+      render(view:'start', model:[name:params.student])
     }
 
   }
@@ -36,8 +36,8 @@ class TestController {
     if(session.test) {
         return [imTest:session.test.imTest]
     } else{
-        flash.message = "Ви повинні почати тест з початку"
-        redirect(controller:"test", action:"start")
+        flash.message = 'Ви повинні почати тест з початку'
+        redirect(controller:'test', action:'start')
         null
     }
   }
@@ -46,10 +46,10 @@ class TestController {
     TestProcess testProcess = session.test
     boolean hasErrors = testProcess.imTest.processErrors(params.answer)
     if (hasErrors) {
-      render(view:"interestsMap", model:[imTest:session.test.imTest, hasErrors:hasErrors])
+      render(view:'interestsMap', model:[imTest:testProcess, hasErrors:hasErrors])
     } else {
       testService.persistTest(testProcess)
-      redirect(action:"actuality")
+      redirect(action:'actuality')
     }
   }
 
@@ -57,8 +57,8 @@ class TestController {
     if(session.test) {
         return [actuality:session.test.actualTest]
     } else{
-        flash.message = "Ви повинні почати тест з початку"
-        redirect(controller:"test", action:"start")
+        flash.message = 'Ви повинні почати тест з початку'
+        redirect(controller:'test', action:'start')
         null
     }
   }
@@ -67,10 +67,10 @@ class TestController {
     TestProcess testProcess = session.test
     boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
     if (hasErrors) {
-      render(view:"actuality", model:[actuality:session.test.actualTest, hasErrors:hasErrors])
+      render(view:'actuality', model:[actuality:session.test.actualTest, hasErrors:hasErrors])
     } else {
       testService.persistTest(testProcess)
-      redirect(action:"yovayshy")
+      redirect(action:'yovayshy')
     }
   }
 
@@ -78,8 +78,8 @@ class TestController {
     if(session.test) {
         return [yovayshyTest:session.test.yovayshyTest]
     } else{
-        flash.message = "Ви повинні почати тест з початку"
-        redirect(controller:"test", action:"start")
+        flash.message = 'Ви повинні почати тест з початку'
+        redirect(controller:'test', action:'start')
         null
     }
   }
@@ -88,10 +88,10 @@ class TestController {
     TestProcess testProcess = session.test
     boolean hasErrors = testProcess.yovayshyTest.processErrors(params.answer)
     if (hasErrors) {
-      render(view:"yovayshy", model:[yovayshyTest:session.test.yovayshyTest, hasErrors:hasErrors])
+      render(view:'yovayshy', model:[yovayshyTest:session.test.yovayshyTest, hasErrors:hasErrors])
     } else {
       testService.persistTest(testProcess)
-      redirect(action:"result")
+      redirect(action:'result')
     }
   }
 
@@ -111,20 +111,20 @@ class TestController {
     boolean hasErrors = false
     testProcess.lidershipTest.lidersiprocessQuestions.each {processedQuestion ->
       String answer = (String) params['answer'+processedQuestion.lidershipQuestion.id]
-      if (answer != null && ["1","2"].any{it == answer}) {
+      if (answer != null && ['1','2'].any{it == answer}) {
         processedQuestion.answer = Integer.valueOf (answer)
-        processedQuestion.errorMessage = ""
+        processedQuestion.errorMessage = ''
       } else {
-        processedQuestion.errorMessage = "Вкажіть будь-ласа відповідь"
+        processedQuestion.errorMessage = 'Вкажіть будь-ласа відповідь'
         hasErrors = true;
       }
     }
 
     if (hasErrors) {
-      render(view:"lidership", model:[lidership:testProcess.lidershipTest, hasErrors:hasErrors])
+      render(view:'lidership', model:[lidership:testProcess.lidershipTest, hasErrors:hasErrors])
     } else {
       testService.persistExtendedTests(testProcess)
-      redirect(action:"motivation")
+      redirect(action:'motivation')
     }
   }
 
@@ -140,10 +140,10 @@ class TestController {
     motivationTest.speciality = params.speciality
     
     if (hasErrors) {
-      render(view:"motivation", model:[motivation:motivationTest, hasErrors:hasErrors])
+      render(view:'motivation', model:[motivation:motivationTest, hasErrors:hasErrors])
     } else {
       testService.persistExtendedTests(testProcess)
-      redirect(action:"holland")
+      redirect(action:'holland')
     }
   }
 
@@ -175,7 +175,7 @@ class TestController {
     List<HollandQuestion> hollandQuestions = []
     for (int i = 0; i<= idMax; i++) {
       String value = (String) params['question'+i]
-      if (value != null && value == "on") {
+      if (value != null && value == 'on') {
         HollandQuestion question = HollandQuestion.findById(i)
         hollandQuestions.add(question)
       }
@@ -185,7 +185,7 @@ class TestController {
 
     testService.persistExtendedTests(testProcess)
     session.test = null
-    redirect(action:"result")
+    redirect(action:'result')
   }
 
 }

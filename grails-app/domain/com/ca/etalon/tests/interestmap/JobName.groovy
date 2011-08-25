@@ -9,10 +9,10 @@ class JobName {
     }
 
     static mapping = {
-      table "JobName"
+      table 'JobName'
       columns {
-        id column:"JobNameId"
-        name column:"Name"
+        id column:'JobNameId'
+        name column:'Name'
       }
       version false
     }

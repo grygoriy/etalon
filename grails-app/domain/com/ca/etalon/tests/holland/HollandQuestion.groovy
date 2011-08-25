@@ -13,12 +13,12 @@ class HollandQuestion {
     }
 
     static mapping = {
-      table "HollandQuestion"
+      table 'HollandQuestion'
       columns {
-        id column:"HollandQuestionId"
-        question column:"Question"
-        vector column:"HollandVector", enumType:"string"
-        type column:"HollandType", enumType:"string"
+        id column:'HollandQuestionId'
+        question column:'Question'
+        vector column:'HollandVector', enumType:'string'
+        type column:'HollandType', enumType:'string'
       }
       version false
     }

@@ -11,11 +11,11 @@ class IMQuestion {
     }
 
     static mapping = {
-      table "IMQuestion"
+      table 'IMQuestion'
       columns {
-        id column:"IMQuestionId"
-        question column:"Question"
-        category lazy:false, column:"CategoryId"
+        id column:'IMQuestionId'
+        question column:'Question'
+        category lazy:false, column:'CategoryId'
       }
       version false
     }

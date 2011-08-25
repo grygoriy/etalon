@@ -15,14 +15,14 @@ class YovayshyQuestion {
     }
 
    static mapping = {
-     table "YovayshyQuestion"
+     table 'YovayshyQuestion'
      columns {
-       id column:"YovayshyQuestionId"
-       question column:"Question"
-       caseA column:"CaseA"
-       caseB column:"CaseB"
-       keyOnA column:"KeyOnA", enumType:"string"
-       keyOnB column:"KeyOnB", enumType:"string"
+       id column:'YovayshyQuestionId'
+       question column:'Question'
+       caseA column:'CaseA'
+       caseB column:'CaseB'
+       keyOnA column:'KeyOnA', enumType:'string'
+       keyOnB column:'KeyOnB', enumType:'string'
      }
 
      version false

@@ -29,11 +29,7 @@ import com.ca.etalon.tests.interestmap.IMQuestion
 class TestFactory {
 
   static TestProcess getTestProcessTamplate() {
-    TestProcess testProcess = new TestProcess()
-    testProcess.imTest = getIMTest()
-    testProcess.actualTest = actualTest
-    testProcess.yovayshyTest = yivayshyTest
-    return testProcess
+    new TestProcess(imTest: getIMTest(), actualTest: actualTest, yovayshyTest: yivayshyTest)
   }
 
   static TestProcess updateWithExtraTest(TestProcess testProcess) {

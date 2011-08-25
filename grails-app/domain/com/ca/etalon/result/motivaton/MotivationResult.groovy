@@ -12,11 +12,11 @@ class MotivationResult {
     }
 
     static mapping = {
-      table "MotivationResult"
+      table 'MotivationResult'
       columns {
-        id column:"MotivationResultId"
-        speciality column:"Speciality"
-        testResults column:"TestResultsId"
+        id column:'MotivationResultId'
+        speciality column:'Speciality'
+        testResults column:'TestResultsId'
       }
       version false
     }

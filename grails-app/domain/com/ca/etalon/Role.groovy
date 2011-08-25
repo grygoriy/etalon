@@ -7,11 +7,11 @@ class Role {
 	String authority
 
       static mapping = {
-        table "Role"
+        table 'Role'
         columns {
-          id column: "RoleId"
-          authority column: "Authority"
-          name column: "Name"
+          id column: 'RoleId'
+          authority column: 'Authority'
+          name column: 'Name'
         }
         cache true
         version false

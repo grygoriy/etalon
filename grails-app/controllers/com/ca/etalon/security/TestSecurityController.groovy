@@ -8,7 +8,7 @@ class TestSecurityController {
     def springSecurityService
 
     def validateMajorTest = {
-      return [password:""]
+      return [password:'']
     }
 
     def submitValidateMajorTest = {
@@ -16,10 +16,10 @@ class TestSecurityController {
       User user = User.findByLogin(SecurityUtils.subject.principal);
       if (user.password == springSecurityService.encodePassword(password)) {
         session[session.validationKey] = true
-        redirect(controller: "test", action:session.testRedirect)
+        redirect(controller: 'test', action:session.testRedirect)
       } else {
-        flash.message = "Ви ввели не правильний пароль"
-        render(view:"validateMajorTest", model:[password:""])
+        flash.message = 'Ви ввели не правильний пароль'
+        render(view:'validateMajorTest', model:[password:''])
       }
 
     }

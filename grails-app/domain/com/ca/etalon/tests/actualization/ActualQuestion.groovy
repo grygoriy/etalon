@@ -10,11 +10,11 @@ class ActualQuestion {
     }
 
     static mapping = {
-      table "ActualQuestion"
+      table 'ActualQuestion'
       columns {
-        id column:"ActualQuestionId"
-        question column:"Question"
-        isReverted column:"isReverted"
+        id column:'ActualQuestionId'
+        question column:'Question'
+        isReverted column:'isReverted'
       }
       version false
     }

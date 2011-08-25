@@ -12,12 +12,12 @@ class VectorResult {
     }
 
     static mapping = {
-      table "VectorResult"
+      table 'VectorResult'
       columns {
-        id column:"VectorResultId"
-        motivationVector column:"MotivationVector", enumType:"string"
-        score column:"Score"
-        motivationResult column:"MotivationResultId"
+        id column:'VectorResultId'
+        motivationVector column:'MotivationVector', enumType:'string'
+        score column:'Score'
+        motivationResult column:'MotivationResultId'
       }
       version:false
     }

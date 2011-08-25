@@ -8,12 +8,12 @@ package com.ca.etalon.test.yovayshy
  */
 
 public enum YovayshySphere {
-  Art("сфера мистецтва")  ,
-  Technical("сфера технічних інтересів"),
-  Poepleware("сфера роботи з людьми"),
-  Intelligence("сфера розумової праці"),
-  Handwork("сфера фізичної праці"),
-  Material("сфера матеріальних інтересів")
+  Art('сфера мистецтва')  ,
+  Technical('сфера технічних інтересів'),
+  Poepleware('сфера роботи з людьми'),
+  Intelligence('сфера розумової праці'),
+  Handwork('сфера фізичної праці'),
+  Material('сфера матеріальних інтересів')
 
   String message
 

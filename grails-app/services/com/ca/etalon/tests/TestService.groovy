@@ -30,7 +30,7 @@ class TestService {
     } 
 
     def extendTest(TestProcess testProcess) {
-      return TestFactory.updateWithExtraTest(testProcess);
+      TestFactory.updateWithExtraTest(testProcess);
     }
 
     def persistExtendedTests(TestProcess testProcess) {
@@ -48,6 +48,10 @@ class TestService {
         testResult = TestResults.findById(process.testResultId) 
       } else {
         testResult = new TestResults()
+      }
+
+      if (testResult == null) {
+          testResult = new TestResults()
       }
 
       testResult.studentName = process.userName
@@ -100,17 +104,14 @@ class TestService {
     }
 
     private Set<IMResult> getIMResults(TestProcess process, TestResults testResults) {
-      def imResults = [:] as Set
+      def imResults = new HashSet()
       def jobNames = JobName.list()
       jobNames.each {jobName ->
         IMResult imResult = getResultsForCategory(jobName, process)
         if (imResult.result != 0) {
-          if (imResult.hasErrors()) {
-            println imResult.errors
-          }
           imResult.results = testResults
           imResult.save()
-          imResults.add(imResult)
+          imResults << imResult
         }
       }
       return imResults
@@ -141,13 +142,13 @@ class TestService {
 
     String message;
     if (score <= 25) {
-      message = "якості лідера виражені слабко"
+      message = 'якості лідера виражені слабко'
     } else if (score >= 26 && score <= 35){
-      message = "якості лідера виражені середньою мірою"
+      message = 'якості лідера виражені середньою мірою'
     } else if (score >= 36 && score <= 40) {
-      message = "лідерські  якості виражені сильно"
+      message = 'лідерські  якості виражені сильно'
     } else {
-      message = "людина як лідер схильна до диктату"
+      message = 'людина як лідер схильна до диктату'
     }
 
     return new LidershipResult(score:score, message:message).save()

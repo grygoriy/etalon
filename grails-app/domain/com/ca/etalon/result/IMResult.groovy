@@ -9,12 +9,12 @@ class IMResult {
     TestResults results  
 
     static mapping = {
-      table "IMResult"
+      table 'IMResult'
       columns {
-        id column:"IMResultId"
-        category column:"JobNameId"
-        result column:"Result"
-        results column:"TestResultsId"
+        id column:'IMResultId'
+        category column:'JobNameId'
+        result column:'Result'
+        results column:'TestResultsId'
       }
       version false
     }

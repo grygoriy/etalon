@@ -15,10 +15,10 @@ class YovayshyTest {
 
   private static Map<Integer, YovayshyAnswer> getYovayshyAnswerMap() {
     Map<Integer, YovayshyAnswer> result = new HashMap<Integer,YovayshyAnswer>(4)
-    result.put(1, new YovayshyAnswer(id:1, label:"А", scoreA:3, scoreB:0));
-    result.put(2, new YovayshyAnswer(id:2, label:"Б", scoreA:0, scoreB:3));
-    result.put(3, new YovayshyAnswer(id:3, label:"Більш А ніж Б", scoreA:2, scoreB:1));
-    result.put(4, new YovayshyAnswer(id:4, label:"Більш Б ніж А", scoreA:1, scoreB:2));
+    result.put(1, new YovayshyAnswer(id:1, label:'А', scoreA:3, scoreB:0));
+    result.put(2, new YovayshyAnswer(id:2, label:'Б', scoreA:0, scoreB:3));
+    result.put(3, new YovayshyAnswer(id:3, label:'Більш А ніж Б', scoreA:2, scoreB:1));
+    result.put(4, new YovayshyAnswer(id:4, label:'Більш Б ніж А', scoreA:1, scoreB:2));
 
     return result
 
@@ -26,7 +26,7 @@ class YovayshyTest {
 
   @SuppressWarnings('ExplicitHashSetInstantiation')
   static List<YovayshyAnswer> getAnswers() {
-    yovayshyAnswerMap.values()
+    yovayshyAnswerMap.entrySet()*.value
   }
 
   static YovayshyAnswer getAnswerById(Integer id) {
@@ -37,15 +37,15 @@ class YovayshyTest {
     boolean hasErrors = false
     def i = 0
     processedQuestions.each { YovayshyProcessedQuestion item ->
-      if ("" == answers[i].trim()) {
+      if ('' == answers[i].trim()) {
         hasErrors = true
-        item.errorMessage = "Будь ласка вибереріть відповіть зі списку"
+        item.errorMessage = 'Будь ласка вибереріть відповіть зі списку'
       } else if (!(Integer.valueOf(answers[i]) > 0 && Integer.valueOf(answers[i]) <= 4)) {
-        item.errorMessage = "Будь ласка вибереріть відповіть зі списку"
+        item.errorMessage = 'Будь ласка вибереріть відповіть зі списку'
         item.answer = Integer.valueOf(answers[i])
         hasErrors = true;
       } else {
-        item.errorMessage = ""
+        item.errorMessage = ''
         item.answer = Integer.valueOf(answers[i])
       }
       i++

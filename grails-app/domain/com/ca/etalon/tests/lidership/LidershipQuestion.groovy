@@ -5,20 +5,20 @@ class LidershipQuestion {
     Long id
     String question
     Integer keyCase
-    String caseA = "Так"
-    String caseB = "Ні"
+    String caseA = 'Так'
+    String caseB = 'Ні'
 
     static constraints = {
     }
 
     static mapping = {
-      table "LidershipQuestion"
+      table 'LidershipQuestion'
       columns {
-        id column:"LidershipQuestionId"
-        question column:"Question"
-        keyCase column:"keyCase"
-        caseA column:"CaseA"
-        caseB column:"CaseB"
+        id column:'LidershipQuestionId'
+        question column:'Question'
+        keyCase column:'keyCase'
+        caseA column:'CaseA'
+        caseB column:'CaseB'
       }
       version false
     }

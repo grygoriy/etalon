@@ -9,11 +9,11 @@ class LidershipResult {
     }
 
     static mapping = {
-      table "LidershipResult"
+      table 'LidershipResult'
       columns {
-        id column:"LidershipResultId"
-        score column:"Score"
-        message column:"Message"
+        id column:'LidershipResultId'
+        score column:'Score'
+        message column:'Message'
       }
       version false
     }

@@ -2,8 +2,6 @@ dataSource {
 	pooled = true
     driverClassName = "com.mysql.jdbc.Driver"
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
-	username = "root"
-	password = ""
 }
 hibernate {
     cache.use_second_level_cache=true
@@ -15,19 +13,23 @@ environments {
 	development {
 		dataSource {
 			url = "jdbc:mysql://localhost/etalon?useUnicode=true&characterEncoding=utf-8"
+            username = "root"
+            password = ""
 		}
 	}
 	test {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:hsqldb:mem:testDb"
+            username = "root"
+            password = ""
 		}
 	}
 	production {
 		dataSource {
-			url = "jdbc:mysql://localhost/etalon?useUnicode=true&characterEncoding=utf-8"
+			url = "jdbc:mysql://mysql.etalon.jelastic.com/etalon?useUnicode=true&characterEncoding=utf-8"
             username = "root"
-            password = "qOIwuEU62v"
+            password = "TOHBFU2zmV"
 		}
 	}
 }

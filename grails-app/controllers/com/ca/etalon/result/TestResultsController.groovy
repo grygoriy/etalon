@@ -2,7 +2,7 @@ package com.ca.etalon.result
 
 import grails.plugins.springsecurity.Secured
 
-@Secured(["ROLE_ADMINISTRATOR"])
+@Secured(['ROLE_ADMINISTRATOR'])
 class TestResultsController {
     
     def index = { redirect(action:list,params:params) }
@@ -21,15 +21,15 @@ class TestResultsController {
     }                                                           
 
     def delete = {
-      redirect(action:"list")
+      redirect(action:'list')
     }
 
     def edit = {
-      redirect(action:"list")
+      redirect(action:'list')
     }
 
     def update = {
-      redirect(action:"list")
+      redirect(action:'list')
 
     }
 

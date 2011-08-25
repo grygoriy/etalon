@@ -12,11 +12,11 @@ class YovayshyResult {
     }
 
     static mapping = {
-      table "YovayshyResult"
+      table 'YovayshyResult'
       columns {
-        id column:"YovayshyResultId"
-        proffecionalSphere column:"ProffecionalSphere"
-        proffecionalIntrests column:"ProffecionalIntrests"
+        id column:'YovayshyResultId'
+        proffecionalSphere column:'ProffecionalSphere'
+        proffecionalIntrests column:'ProffecionalIntrests'
       }
       version false
     }

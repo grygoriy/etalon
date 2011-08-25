@@ -18,17 +18,17 @@ class User {
 	}
 
   static mapping = {
-          table "User"
+          table 'User'
           columns {
-              id column: "UserId"
+              id column: 'UserId'
               username column: 'Username'
               password column: 'Password'
-              enabled column: "Enabled"
-              accountExpired column: "AccountExpired"
-              accountLocked column: "AccountLocked"
-              passwordExpired column: "PasswordExpired"
-              firstName column : "FirstName"
-              lastName column : "LastName"
+              enabled column: 'Enabled'
+              accountExpired column: 'AccountExpired'
+              accountLocked column: 'AccountLocked'
+              passwordExpired column: 'PasswordExpired'
+              firstName column : 'FirstName'
+              lastName column : 'LastName'
           }
           version false
       }

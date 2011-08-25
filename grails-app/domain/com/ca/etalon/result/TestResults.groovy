@@ -23,16 +23,16 @@ class TestResults {
     }
 
    static mapping = {
-      table "TestResults"
+      table 'TestResults'
       columns {
-        id column:"TestResultsId"
-        studentName column:"StudentName"
-        school column:"SchoolId"
-        actualityResults column:"ActualityResults"
-        yovayshyResult column:"YovayshyResultId"
-        dateCreated column:"DateCreated"
+        id column:'TestResultsId'
+        studentName column:'StudentName'
+        school column:'SchoolId'
+        actualityResults column:'ActualityResults'
+        yovayshyResult column:'YovayshyResultId'
+        dateCreated column:'DateCreated'
         lidershipResult column:'LidershipResultId'
-        motivationResult column:"MotivationResultId"
+        motivationResult column:'MotivationResultId'
       }
       version false
     }

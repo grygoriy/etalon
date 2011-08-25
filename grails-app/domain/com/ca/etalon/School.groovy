@@ -13,10 +13,10 @@ class School {
     }
 
     static mapping = {
-      table "School"
+      table 'School'
       columns {
-        id column:"SchoolId"
-        name column:"Name"
+        id column:'SchoolId'
+        name column:'Name'
       }
       cache true
       version false

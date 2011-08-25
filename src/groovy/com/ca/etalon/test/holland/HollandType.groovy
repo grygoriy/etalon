@@ -7,12 +7,12 @@ package com.ca.etalon.test.holland
  * Time: 11:29:04 PM
  */
 public enum HollandType {
-  Realistic("Реалістичний тип"),
-  Artistic("Артистичний  тип"),
-  Investication("Дослідницький тип"),
-  Social("Соціальний  тип"),
-  Comerce("Підприємницький"),
-  Conventional("Конвенціональний")
+  Realistic('Реалістичний тип'),
+  Artistic('Артистичний  тип'),
+  Investication('Дослідницький тип'),
+  Social('Соціальний  тип'),
+  Comerce('Підприємницький'),
+  Conventional('Конвенціональний')
 
   String message
 

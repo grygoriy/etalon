@@ -8,10 +8,10 @@ package com.ca.etalon.test.motivation
  */
 
 public enum MotivationVector {
-  InternalIndividual ("внутрішні індивідуально значимі мотиви"),
-  InternalSocial("внутрішні соціально значимі  мотиви"),
-  ExternalPositive("зовнішні позитивні мотиви"),
-  ExternalNegative("зовнішні негативні мотиви")
+  InternalIndividual ('внутрішні індивідуально значимі мотиви'),
+  InternalSocial('внутрішні соціально значимі  мотиви'),
+  ExternalPositive('зовнішні позитивні мотиви'),
+  ExternalNegative('зовнішні негативні мотиви')
 
   String message;
 
