@@ -20,7 +20,9 @@ class HollandQuestion {
         vector column:'HollandVector', enumType:'string'
         type column:'HollandType', enumType:'string'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
 

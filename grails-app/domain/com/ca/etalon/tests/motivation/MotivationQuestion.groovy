@@ -17,7 +17,9 @@ class MotivationQuestion {
         question column:'Question'
         motivationVector column:'MotivationVector',  enumType:'string'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
 

@@ -16,7 +16,9 @@ class ActualQuestion {
         question column:'Question'
         isReverted column:'isReverted'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
 

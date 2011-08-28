@@ -20,14 +20,21 @@ import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.tests.interestmap.JobName
 import com.ca.etalon.util.TestFactory
 import com.ca.etalon.util.TestProcess
+import static com.ca.etalon.test.motivation.MotivationVector.InternalIndividual
+import static com.ca.etalon.test.motivation.MotivationVector.InternalSocial
+import static com.ca.etalon.test.motivation.MotivationVector.ExternalNegative
+import static com.ca.etalon.test.motivation.MotivationVector.ExternalPositive
+import grails.plugin.springcache.annotations.Cacheable
 
 class TestService {
-
+  static profiled = true
   boolean transactional = true
 
+    @Cacheable("templateCache")
     def getTestTemplate() {
-      TestFactory.testProcessTamplate
-    } 
+          TestFactory.testProcessTamplate
+
+    }
 
     def extendTest(TestProcess testProcess) {
       TestFactory.updateWithExtraTest(testProcess);
@@ -194,26 +201,26 @@ class TestService {
 
     motivationTest.motivationProcessedQuestions.each  {
       switch (it.motivationQuestion.motivationVector) {
-        case MotivationVector.InternalIndividual :
+        case InternalIndividual :
           internalIndividual++;
           break;
-        case MotivationVector.InternalSocial :
+        case InternalSocial :
           internalSocial++;
           break;
-        case MotivationVector.ExternalNegative :
+        case ExternalNegative :
           externalNegative++
           break;
-        case MotivationVector.ExternalPositive :
+        case ExternalPositive :
           externalPositive++
           break;
       }
     }
 
     return [
-        new VectorResult(motivationVector:MotivationVector.InternalIndividual, score:internalIndividual).save(),
-        new VectorResult(motivationVector:MotivationVector.InternalSocial, score:internalSocial).save(),
-        new VectorResult(motivationVector:MotivationVector.ExternalNegative, score:externalNegative).save(),
-        new VectorResult(motivationVector:MotivationVector.ExternalPositive, score:externalPositive).save()
+        new VectorResult(motivationVector:InternalIndividual, score:internalIndividual).save(),
+        new VectorResult(motivationVector:InternalSocial, score:internalSocial).save(),
+        new VectorResult(motivationVector:ExternalNegative, score:externalNegative).save(),
+        new VectorResult(motivationVector:ExternalPositive, score:externalPositive).save()
         ]
   }
 

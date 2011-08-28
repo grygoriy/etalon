@@ -20,7 +20,9 @@ class LidershipQuestion {
         caseA column:'CaseA'
         caseB column:'CaseB'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
 

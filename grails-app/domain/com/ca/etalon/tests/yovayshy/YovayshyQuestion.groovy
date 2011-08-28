@@ -25,7 +25,9 @@ class YovayshyQuestion {
        keyOnB column:'KeyOnB', enumType:'string'
      }
 
-     version false
+        version false
+        cache true
+        cache usage:'read-only'
    }
 
 

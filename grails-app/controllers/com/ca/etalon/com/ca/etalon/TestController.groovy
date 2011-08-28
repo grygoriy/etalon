@@ -174,7 +174,7 @@ class TestController {
     Integer idMax = HollandQuestion.count();
     List<HollandQuestion> hollandQuestions = []
     for (int i = 0; i<= idMax; i++) {
-      String value = (String) params['question'+i]
+      String value = (String) params["question$i"]
       if (value != null && value == 'on') {
         HollandQuestion question = HollandQuestion.findById(i)
         hollandQuestions.add(question)

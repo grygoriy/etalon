@@ -14,7 +14,9 @@ class JobName {
         id column:'JobNameId'
         name column:'Name'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
 

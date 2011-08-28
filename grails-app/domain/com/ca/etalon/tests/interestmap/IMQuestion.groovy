@@ -17,7 +17,9 @@ class IMQuestion {
         question column:'Question'
         category lazy:false, column:'CategoryId'
       }
-      version false
+        version false
+        cache true
+        cache usage:'read-only'
     }
 
     boolean equals(o) {

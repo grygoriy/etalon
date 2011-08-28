@@ -54,6 +54,7 @@
           </g:if>
         </g:each>
       </table>
+        <input type="hidden" name="profiler" value="1">
       <g:submitButton name="sumbitInterestMap" value="Закінчити тест"/>
     </g:form>
   </body>
