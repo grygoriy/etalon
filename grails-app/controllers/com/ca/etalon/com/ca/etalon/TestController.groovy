@@ -35,7 +35,6 @@ class TestController {
             flash.message = 'Виберіть школу'
             render(view: 'start', model: [name: params.student])
         }
-
     }
 
     @Cacheable("testPageCache")
