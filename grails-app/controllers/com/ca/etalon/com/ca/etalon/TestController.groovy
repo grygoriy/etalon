@@ -25,7 +25,6 @@ class TestController {
 
     def submitInitials = {
         def testProcess = new TestProcess()
-        testProcess.imTest = testFactoryService.getIMTest()
         session.test = testProcess;
         testProcess.userName = params.student
         def school = School.findById(params.schoolId)
@@ -42,6 +41,7 @@ class TestController {
     @Cacheable("testPageCache")
     def interestsMap = {
         if (session.test) {
+            session.test.imTest = testFactoryService.getIMTest()
             return [imTest: session.test.imTest]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
@@ -58,7 +58,6 @@ class TestController {
         } else {
             testService.persistIM(testProcess)
             testProcess.imTest = null;
-            testProcess.actualTest = testFactoryService.actualTest
             redirect(action: 'actuality')
         }
     }
@@ -66,6 +65,7 @@ class TestController {
     @Cacheable("testPageCache")
     def actuality = {
         if (session.test) {
+            session.test.actualTest = testFactoryService.actualTest
             return [actuality: session.test.actualTest]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
@@ -82,7 +82,6 @@ class TestController {
         } else {
             testService.persistActualityTest(testProcess)
             testProcess.actualTest = null
-            testProcess.yovayshyTest = testFactoryService.yovayshyTest
             redirect(action: 'yovayshy')
         }
     }
@@ -90,6 +89,7 @@ class TestController {
     @Cacheable("testPageCache")
     def yovayshy = {
         if (session.test) {
+            session.test.yovayshyTest = testFactoryService.yovayshyTest
             return [yovayshyTest: session.test.yovayshyTest]
         } else {
             flash.message = 'Ви повинні почати тест з початку'

@@ -5,7 +5,6 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'base.css')}" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:layoutHead />
-        <g:javascript library="application" />				
     </head>
     <body style="margin:20">
     <div id="wrap">
