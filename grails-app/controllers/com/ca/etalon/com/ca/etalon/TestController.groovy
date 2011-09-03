@@ -7,195 +7,203 @@ import com.ca.etalon.test.motivation.MotivationTest
 import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.test.holland.HollandVector
 import com.ca.etalon.tests.TestFactoryService
+import grails.plugin.springcache.annotations.Cacheable
 
 class TestController {
 
-  TestService testService
+    TestService testService
 
-  TestFactoryService testFactoryService
+    TestFactoryService testFactoryService
 
-  def defaultAction = 'start'
+    def defaultAction = 'start'
 
-  def start = {
-    String name = '';
-    return [student:name]
-  }
-
-  def submitInitials = {
-    def testProcess = new TestProcess()
-    testProcess.imTest = testFactoryService.getIMTest()
-    session.test = testProcess;
-    testProcess.userName = params.student
-    def school = School.findById(params.schoolId)
-    if (school != null) {
-      testProcess.school = school
-      redirect(action:'interestsMap')
-    } else {
-      flash.message = 'Виберіть школу'
-      render(view:'start', model:[name:params.student])
+    @Cacheable("testPageCache")
+    def start = {
+        String name = '';
+        return [student: name]
     }
 
-  }
+    def submitInitials = {
+        def testProcess = new TestProcess()
+        testProcess.imTest = testFactoryService.getIMTest()
+        session.test = testProcess;
+        testProcess.userName = params.student
+        def school = School.findById(params.schoolId)
+        if (school != null) {
+            testProcess.school = school
+            redirect(action: 'interestsMap')
+        } else {
+            flash.message = 'Виберіть школу'
+            render(view: 'start', model: [name: params.student])
+        }
 
-  def interestsMap = {
-    if(session.test) {
-        return [imTest:session.test.imTest]
-    } else {
-        flash.message = 'Ви повинні почати тест з початку'
-        redirect(controller:'test', action:'start')
-        null
-    }
-  }
-
-  def sumbitInterestMap = {
-    TestProcess testProcess = session.test
-    boolean hasErrors = testProcess.imTest.processErrors(params.answer)
-    if (hasErrors) {
-      render(view:'interestsMap', model:[imTest:testProcess, hasErrors:hasErrors])
-    } else {
-        testService.persistIM(testProcess)
-        testProcess.imTest = null;
-        testProcess.actualTest = testFactoryService.actualTest
-      redirect(action:'actuality')
-    }
-  }
-
-  def actuality = {
-    if(session.test) {
-        return [actuality:session.test.actualTest]
-    } else{
-        flash.message = 'Ви повинні почати тест з початку'
-        redirect(controller:'test', action:'start')
-        null
-    }
-  }
-
-  def submitActuality = {
-    TestProcess testProcess = session.test
-    boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
-    if (hasErrors) {
-      render(view:'actuality', model:[actuality:session.test.actualTest, hasErrors:hasErrors])
-    } else {
-      testService.persistActualityTest(testProcess)
-      testProcess.actualTest = null
-      testProcess.yovayshyTest = testFactoryService.yovayshyTest
-      redirect(action:'yovayshy')
-    }
-  }
-
-  def yovayshy = {
-    if(session.test) {
-        return [yovayshyTest:session.test.yovayshyTest]
-    } else{
-        flash.message = 'Ви повинні почати тест з початку'
-        redirect(controller:'test', action:'start')
-        null
-    }
-  }
-
-  def submitYovayshy = {
-    TestProcess testProcess = session.test
-    boolean hasErrors = testProcess.yovayshyTest.processErrors(params.answer)
-    if (hasErrors) {
-      render(view:'yovayshy', model:[yovayshyTest:session.test.yovayshyTest, hasErrors:hasErrors])
-    } else {
-      testService.persistYovayshy(testProcess)
-      testProcess.yovayshyTest = null
-      redirect(action:'result')
-    }
-  }
-
-  def result = {
-    session.passMain = false
-  }
- 
-  def lidership = {
-    session.test.lidershipTest = testFactoryService.lidershipTest
-    return [lidership:session.test.lidershipTest]
-  }
-
-  def submitLidership = {
-    TestProcess testProcess = session.test
-    boolean hasErrors = false
-    testProcess.lidershipTest.lidersiprocessQuestions.each {processedQuestion ->
-      String answer = (String) params['answer'+processedQuestion.lidershipQuestion.id]
-      if (answer != null && ['1','2'].any{it == answer}) {
-        processedQuestion.answer = Integer.valueOf (answer)
-        processedQuestion.errorMessage = ''
-      } else {
-        processedQuestion.errorMessage = 'Вкажіть будь-ласа відповідь'
-        hasErrors = true;
-      }
     }
 
-    if (hasErrors) {
-      render(view:'lidership', model:[lidership:testProcess.lidershipTest, hasErrors:hasErrors])
-    } else {
-      testService.persistLidershipTest(testProcess)
-      session.test.lidershipTest = null;
-      redirect(action:'motivation')
-    }
-  }
-
-  def motivation = {
-    session.test.motivationTest = testFactoryService.motivationTest
-    return [motivation:session.test.motivationTest ]
-  }
-
-  def submitMotivation = {
-    TestProcess testProcess = session.test
-    MotivationTest motivationTest = testProcess.motivationTest
-    boolean hasErrors = testProcess.motivationTest.processErrors(params.answer)
-    motivationTest.speciality = params.speciality
-    
-    if (hasErrors) {
-      render(view:'motivation', model:[motivation:motivationTest, hasErrors:hasErrors])
-    } else {
-      testService.persistMotivationTest(testProcess)
-      session.test.motivationTest = null
-      redirect(action:'holland')
-    }
-  }
-
-  def holland = {
-    List<HollandQuestion> hollandQuestions = HollandQuestion.list()
-    List<HollandQuestion> iLikeIt = []
-    List<HollandQuestion> iCanDoItt = []
-    List<HollandQuestion> proffetion = []
-
-    hollandQuestions.each {
-      switch (it.vector) {
-        case HollandVector.ILikeIt:
-            iLikeIt.add(it);
-            break;
-        case HollandVector.ICanDoIt:
-          iCanDoItt.add(it);
-          break;
-        case HollandVector.Proffetion:
-          proffetion.add(it);
-          break;
-      }
+    @Cacheable("testPageCache")
+    def interestsMap = {
+        if (session.test) {
+            return [imTest: session.test.imTest]
+        } else {
+            flash.message = 'Ви повинні почати тест з початку'
+            redirect(controller: 'test', action: 'start')
+            null
+        }
     }
 
-    return [iLikeIt:iLikeIt, iCanDoIt:iCanDoItt, proffetion:proffetion]
-  }
-
-  def submitHolland = {
-    Integer idMax = HollandQuestion.count();
-    List<HollandQuestion> hollandQuestions = []
-    for (int i = 0; i<= idMax; i++) {
-      String value = (String) params["question$i"]
-      if (value != null && value == 'on') {
-        HollandQuestion question = HollandQuestion.findById(i)
-        hollandQuestions.add(question)
-      }
+    def sumbitInterestMap = {
+        TestProcess testProcess = session.test
+        boolean hasErrors = testProcess.imTest.processErrors(params.answer)
+        if (hasErrors) {
+            render(view: 'interestsMap', model: [imTest: testProcess, hasErrors: hasErrors])
+        } else {
+            testService.persistIM(testProcess)
+            testProcess.imTest = null;
+            testProcess.actualTest = testFactoryService.actualTest
+            redirect(action: 'actuality')
+        }
     }
-    TestProcess testProcess = session.test
-    testProcess.hollandQuestions = hollandQuestions
 
-    testService.persistHollandTests(testProcess)
-    session.test = null
-    redirect(action:'result')
-  }
+    @Cacheable("testPageCache")
+    def actuality = {
+        if (session.test) {
+            return [actuality: session.test.actualTest]
+        } else {
+            flash.message = 'Ви повинні почати тест з початку'
+            redirect(controller: 'test', action: 'start')
+            null
+        }
+    }
+
+    def submitActuality = {
+        TestProcess testProcess = session.test
+        boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
+        if (hasErrors) {
+            render(view: 'actuality', model: [actuality: session.test.actualTest, hasErrors: hasErrors])
+        } else {
+            testService.persistActualityTest(testProcess)
+            testProcess.actualTest = null
+            testProcess.yovayshyTest = testFactoryService.yovayshyTest
+            redirect(action: 'yovayshy')
+        }
+    }
+
+    @Cacheable("testPageCache")
+    def yovayshy = {
+        if (session.test) {
+            return [yovayshyTest: session.test.yovayshyTest]
+        } else {
+            flash.message = 'Ви повинні почати тест з початку'
+            redirect(controller: 'test', action: 'start')
+            null
+        }
+    }
+
+    def submitYovayshy = {
+        TestProcess testProcess = session.test
+        boolean hasErrors = testProcess.yovayshyTest.processErrors(params.answer)
+        if (hasErrors) {
+            render(view: 'yovayshy', model: [yovayshyTest: session.test.yovayshyTest, hasErrors: hasErrors])
+        } else {
+            testService.persistYovayshy(testProcess)
+            testProcess.yovayshyTest = null
+            redirect(action: 'result')
+        }
+    }
+
+    def result = {
+        session.passMain = false
+    }
+
+    @Cacheable("testPageCache")
+    def lidership = {
+        session.test.lidershipTest = testFactoryService.lidershipTest
+        return [lidership: session.test.lidershipTest]
+    }
+
+    def submitLidership = {
+        TestProcess testProcess = session.test
+        boolean hasErrors = false
+        testProcess.lidershipTest.lidersiprocessQuestions.each {processedQuestion ->
+            String answer = (String) params['answer' + processedQuestion.lidershipQuestion.id]
+            if (answer != null && ['1', '2'].any {it == answer}) {
+                processedQuestion.answer = Integer.valueOf(answer)
+                processedQuestion.errorMessage = ''
+            } else {
+                processedQuestion.errorMessage = 'Вкажіть будь-ласа відповідь'
+                hasErrors = true;
+            }
+        }
+
+        if (hasErrors) {
+            render(view: 'lidership', model: [lidership: testProcess.lidershipTest, hasErrors: hasErrors])
+        } else {
+            testService.persistLidershipTest(testProcess)
+            session.test.lidershipTest = null;
+            redirect(action: 'motivation')
+        }
+    }
+
+    @Cacheable("testPageCache")
+    def motivation = {
+        session.test.motivationTest = testFactoryService.motivationTest
+        return [motivation: session.test.motivationTest]
+    }
+
+    def submitMotivation = {
+        TestProcess testProcess = session.test
+        MotivationTest motivationTest = testProcess.motivationTest
+        boolean hasErrors = testProcess.motivationTest.processErrors(params.answer)
+        motivationTest.speciality = params.speciality
+
+        if (hasErrors) {
+            render(view: 'motivation', model: [motivation: motivationTest, hasErrors: hasErrors])
+        } else {
+            testService.persistMotivationTest(testProcess)
+            session.test.motivationTest = null
+            redirect(action: 'holland')
+        }
+    }
+
+    @Cacheable("testPageCache")
+    def holland = {
+        List<HollandQuestion> hollandQuestions = HollandQuestion.list()
+        List<HollandQuestion> iLikeIt = []
+        List<HollandQuestion> iCanDoItt = []
+        List<HollandQuestion> proffetion = []
+
+        hollandQuestions.each {
+            switch (it.vector) {
+                case HollandVector.ILikeIt:
+                    iLikeIt.add(it);
+                    break;
+                case HollandVector.ICanDoIt:
+                    iCanDoItt.add(it);
+                    break;
+                case HollandVector.Proffetion:
+                    proffetion.add(it);
+                    break;
+            }
+        }
+
+        return [iLikeIt: iLikeIt, iCanDoIt: iCanDoItt, proffetion: proffetion]
+    }
+
+    def submitHolland = {
+        Integer idMax = HollandQuestion.count();
+        List<HollandQuestion> hollandQuestions = []
+        for (int i = 0; i <= idMax; i++) {
+            String value = (String) params["question$i"]
+            if (value != null && value == 'on') {
+                HollandQuestion question = HollandQuestion.findById(i)
+                hollandQuestions.add(question)
+            }
+        }
+        TestProcess testProcess = session.test
+        testProcess.hollandQuestions = hollandQuestions
+
+        testService.persistHollandTests(testProcess)
+        session.test = null
+        redirect(action: 'result')
+    }
 
 }
