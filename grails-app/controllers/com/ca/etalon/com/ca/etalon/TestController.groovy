@@ -6,10 +6,14 @@ import com.ca.etalon.util.TestProcess
 import com.ca.etalon.test.motivation.MotivationTest
 import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.test.holland.HollandVector
+import com.ca.etalon.tests.TestFactoryService
 
 class TestController {
 
   TestService testService
+
+  TestFactoryService testFactoryService
+
   def defaultAction = 'start'
 
   def start = {
@@ -18,7 +22,8 @@ class TestController {
   }
 
   def submitInitials = {
-    def testProcess = testService.testTemplate
+    def testProcess = new TestProcess()
+    testProcess.imTest = testFactoryService.getIMTest()
     session.test = testProcess;
     testProcess.userName = params.student
     def school = School.findById(params.schoolId)
@@ -35,7 +40,7 @@ class TestController {
   def interestsMap = {
     if(session.test) {
         return [imTest:session.test.imTest]
-    } else{
+    } else {
         flash.message = 'Ви повинні почати тест з початку'
         redirect(controller:'test', action:'start')
         null
@@ -48,7 +53,9 @@ class TestController {
     if (hasErrors) {
       render(view:'interestsMap', model:[imTest:testProcess, hasErrors:hasErrors])
     } else {
-      testService.persistTest(testProcess)
+        testService.persistIM(testProcess)
+        testProcess.imTest = null;
+        testProcess.actualTest = testFactoryService.actualTest
       redirect(action:'actuality')
     }
   }
@@ -69,7 +76,9 @@ class TestController {
     if (hasErrors) {
       render(view:'actuality', model:[actuality:session.test.actualTest, hasErrors:hasErrors])
     } else {
-      testService.persistTest(testProcess)
+      testService.persistActualityTest(testProcess)
+      testProcess.actualTest = null
+      testProcess.yovayshyTest = testFactoryService.yovayshyTest
       redirect(action:'yovayshy')
     }
   }
@@ -90,7 +99,8 @@ class TestController {
     if (hasErrors) {
       render(view:'yovayshy', model:[yovayshyTest:session.test.yovayshyTest, hasErrors:hasErrors])
     } else {
-      testService.persistTest(testProcess)
+      testService.persistYovayshy(testProcess)
+      testProcess.yovayshyTest = null
       redirect(action:'result')
     }
   }
@@ -100,10 +110,8 @@ class TestController {
   }
  
   def lidership = {
-    TestProcess testProcess = session.test
-    testProcess = testService.extendTest(testProcess)
-
-    return [lidership:testProcess.lidershipTest]
+    session.test.lidershipTest = testFactoryService.lidershipTest
+    return [lidership:session.test.lidershipTest]
   }
 
   def submitLidership = {
@@ -123,14 +131,15 @@ class TestController {
     if (hasErrors) {
       render(view:'lidership', model:[lidership:testProcess.lidershipTest, hasErrors:hasErrors])
     } else {
-      testService.persistExtendedTests(testProcess)
+      testService.persistLidershipTest(testProcess)
+      session.test.lidershipTest = null;
       redirect(action:'motivation')
     }
   }
 
   def motivation = {
-    TestProcess testProcess = session.test
-    return [motivation:testProcess.motivationTest]
+    session.test.motivationTest = testFactoryService.motivationTest
+    return [motivation:session.test.motivationTest ]
   }
 
   def submitMotivation = {
@@ -142,7 +151,8 @@ class TestController {
     if (hasErrors) {
       render(view:'motivation', model:[motivation:motivationTest, hasErrors:hasErrors])
     } else {
-      testService.persistExtendedTests(testProcess)
+      testService.persistMotivationTest(testProcess)
+      session.test.motivationTest = null
       redirect(action:'holland')
     }
   }
@@ -183,7 +193,7 @@ class TestController {
     TestProcess testProcess = session.test
     testProcess.hollandQuestions = hollandQuestions
 
-    testService.persistExtendedTests(testProcess)
+    testService.persistHollandTests(testProcess)
     session.test = null
     redirect(action:'result')
   }

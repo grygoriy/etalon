@@ -12,68 +12,73 @@ import com.ca.etalon.test.actuality.ActualTest
 import com.ca.etalon.test.holland.HollandType
 import com.ca.etalon.test.lidership.LidershipTest
 import com.ca.etalon.test.motivation.MotivationTest
-import com.ca.etalon.test.motivation.MotivationVector
+
 import com.ca.etalon.test.yovayshy.YovayshyAnswer
 import com.ca.etalon.test.yovayshy.YovayshySphere
 import com.ca.etalon.test.yovayshy.YovayshyTest
 import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.tests.interestmap.JobName
-import com.ca.etalon.util.TestFactory
 import com.ca.etalon.util.TestProcess
 import static com.ca.etalon.test.motivation.MotivationVector.InternalIndividual
 import static com.ca.etalon.test.motivation.MotivationVector.InternalSocial
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalNegative
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalPositive
-import grails.plugin.springcache.annotations.Cacheable
 
 class TestService {
   static profiled = true
   boolean transactional = true
 
-    @Cacheable("templateCache")
-    def getTestTemplate() {
-          TestFactory.testProcessTamplate
-
+    void persistMotivationTest(TestProcess testProcess) {
+        def testResult = TestResults.findById(testProcess.testResultId)
+        testResult.motivationResult = getMotivationResult(testProcess)
+        testResult.save()
     }
 
-    def extendTest(TestProcess testProcess) {
-      TestFactory.updateWithExtraTest(testProcess);
+    void persistLidershipTest(TestProcess testProcess) {
+        def testResult = TestResults.findById(testProcess.testResultId)
+        testResult.lidershipResult = getLidershipResult(testProcess)
+        testResult.save()
     }
 
-    def persistExtendedTests(TestProcess testProcess) {
+    void persistHollandTests(TestProcess testProcess) {
       def testResult = TestResults.findById(testProcess.testResultId)
-      testResult.lidershipResult = getLidershipResult(testProcess)
-      testResult.motivationResult = getMotivationResult(testProcess)
       testResult.hollandResults = getHollandResult(testProcess)
       testResult.save()
-      return testResult
     }
 
-    def persistTest(TestProcess process) {
-      TestResults testResult
-      if (process.testResultId != null) {
-        testResult = TestResults.findById(process.testResultId) 
-      } else {
-        testResult = new TestResults()
-      }
-
-      if (testResult == null) {
+    def persistIM(TestProcess process) {
+        TestResults testResult
+        if (process.testResultId != null) {
+          testResult = TestResults.findById(process.testResultId)
+        } else {
           testResult = new TestResults()
-      }
+        }
 
-      testResult.studentName = process.userName
-      testResult.school = process.school
-      testResult.save()
-      process.testResultId = testResult.id
+        if (testResult == null) {
+            testResult = new TestResults()
+        }
 
-      testResult.imResults = getIMResults(process, testResult)
-      testResult.actualityResults = getActualityResult(process)
-      testResult.yovayshyResult = getYovayshyResult(process)
-      testResult.save()
+        testResult.studentName = process.userName
+        testResult.school = process.school
+        testResult.save()
+        process.testResultId = testResult.id
 
-      return testResult
+        testResult.imResults = getIMResults(process, testResult)
+        testResult.save()
     }
-                                
+
+    def persistActualityTest(TestProcess process) {
+        def testResult = TestResults.findById(process.testResultId)
+        testResult.actualityResults = getActualityResult(process)
+        testResult.save()
+    }
+
+    def persistYovayshy(TestProcess process) {
+        def testResult = TestResults.findById(process.testResultId)
+        testResult.yovayshyResult = getYovayshyResult(process)
+        testResult.save()
+    }
+
 
     private Integer getActualityResult(TestProcess process) {
       def result = 0;
@@ -162,9 +167,9 @@ class TestService {
   }
 
   private MotivationResult getMotivationResult(TestProcess process) {
-    MotivationTest motvationTest = process.motivationTest
-    List<VectorResult> vectorResults = getVectorResult(motvationTest)
-    MotivationResult motivationResult = new MotivationResult(speciality:motvationTest.speciality
+    MotivationTest motivationTest = process.motivationTest
+    List<VectorResult> vectorResults = getVectorResult(motivationTest)
+    MotivationResult motivationResult = new MotivationResult(speciality:motivationTest.speciality
                                                            , vectorResults:vectorResults).save()
     return motivationResult
   }

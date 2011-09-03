@@ -3,9 +3,10 @@ package com.ca.etalon.test.interestmap
 import com.ca.etalon.test.IdLabel
 
 class IMTest {
+
   List<IMProcessedQuestion> processedQuestions
 
-  boolean processErrors(String[] answers) {
+  boolean processErrors(List<IMProcessedQuestion> processedQuestions, String[] answers) {
     boolean hasErrors = false
     def i = 0
     processedQuestions.each { IMProcessedQuestion item ->

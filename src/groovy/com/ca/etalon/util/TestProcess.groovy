@@ -10,8 +10,8 @@ import com.ca.etalon.tests.holland.HollandQuestion
 
 class TestProcess {
     Long testResultId
-    String userName;
-    School school;
+    String userName
+    School school
     IMTest imTest = new IMTest();
     ActualTest actualTest;
     YovayshyTest yovayshyTest;
