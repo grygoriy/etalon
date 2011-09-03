@@ -49,6 +49,7 @@ grails.spring.bean.packages = []
 environments {
     production {
         grails.serverURL = "http://etalon.jelastic.com"
+        grails.profiler.disable = true
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"

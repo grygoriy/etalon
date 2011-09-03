@@ -62,7 +62,6 @@
       </g:if>
     </g:each>
   </table>
-    <input type="hidden" name="profiler" value="1">
     <g:submitButton name="submitLidership" value="Закінчити тест"/>
   </g:form>
   </body>

@@ -40,7 +40,6 @@
          </td>
        </tr>                                                                     
       </table>
-        <input type="hidden" name="profiler" value="1">
       <g:submitButton name="submitInitials" value="Почати"/>
       </g:form>
   </body>
