@@ -15,7 +15,7 @@ class IMQuestion {
       columns {
         id column:'IMQuestionId'
         question column:'Question'
-        category lazy:false, column:'CategoryId'
+        category lazy:false, column:'CategoryId', fetch:'join'
       }
         version false
         cache true
