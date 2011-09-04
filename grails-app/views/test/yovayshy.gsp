@@ -37,7 +37,7 @@
         </td>
         <td>
           <g:select name="answer"
-                    from="${YovayshyTest.getAnswers()}"
+                    from="${yovayshyAnswers}"
                     optionKey="id"
                     optionValue="label"
                     noSelection="${['-10':'Виберіть відповідь...']}"

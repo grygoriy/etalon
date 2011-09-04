@@ -33,7 +33,7 @@
             <td>
               <g:select
                       name="answer"
-                      from="${ActualTest.getActualityAnswers()}"
+                      from="${actualityAnswers}"
                       optionKey="id" optionValue="answer"
                       noSelection="${['-1':'Виберіть відповідь...']}"
                       value="${question.answer}">

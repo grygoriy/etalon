@@ -8,6 +8,9 @@ import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.test.holland.HollandVector
 import com.ca.etalon.tests.TestFactoryService
 import grails.plugin.springcache.annotations.Cacheable
+import com.ca.etalon.test.interestmap.IMTest
+import com.ca.etalon.test.actuality.ActualTest
+import com.ca.etalon.test.yovayshy.YovayshyTest
 
 class TestController {
 
@@ -41,7 +44,7 @@ class TestController {
     def interestsMap = {
         if (session.test) {
             session.test.imTest = testFactoryService.getIMTest()
-            return [imTest: session.test.imTest]
+            return [imTest: session.test.imTest, imanswer:IMTest.getIMAnswers()]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
@@ -53,7 +56,9 @@ class TestController {
         TestProcess testProcess = session.test
         boolean hasErrors = testProcess.imTest.processErrors(params.answer)
         if (hasErrors) {
-            render(view: 'interestsMap', model: [imTest: testProcess, hasErrors: hasErrors])
+            render(view: 'interestsMap', model: [imTest: testProcess,
+                                                 hasErrors: hasErrors,
+                                                 imanswer:IMTest.getIMAnswers()])
         } else {
             testService.persistIM(testProcess)
             testProcess.imTest = null;
@@ -65,7 +70,7 @@ class TestController {
     def actuality = {
         if (session.test) {
             session.test.actualTest = testFactoryService.actualTest
-            return [actuality: session.test.actualTest]
+            return [actuality: session.test.actualTest, actualityAnswers:ActualTest.getActualityAnswers()]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
@@ -77,7 +82,9 @@ class TestController {
         TestProcess testProcess = session.test
         boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
         if (hasErrors) {
-            render(view: 'actuality', model: [actuality: session.test.actualTest, hasErrors: hasErrors])
+            render(view: 'actuality', model: [actuality: session.test.actualTest,
+                                              hasErrors: hasErrors,
+                                              actualityAnswers:ActualTest.getActualityAnswers()])
         } else {
             testService.persistActualityTest(testProcess)
             testProcess.actualTest = null
@@ -89,7 +96,7 @@ class TestController {
     def yovayshy = {
         if (session.test) {
             session.test.yovayshyTest = testFactoryService.yovayshyTest
-            return [yovayshyTest: session.test.yovayshyTest]
+            return [yovayshyTest: session.test.yovayshyTest, yovayshyAnswers:YovayshyTest.getAnswers()]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
@@ -101,7 +108,9 @@ class TestController {
         TestProcess testProcess = session.test
         boolean hasErrors = testProcess.yovayshyTest.processErrors(params.answer)
         if (hasErrors) {
-            render(view: 'yovayshy', model: [yovayshyTest: session.test.yovayshyTest, hasErrors: hasErrors])
+            render(view: 'yovayshy', model: [yovayshyTest: session.test.yovayshyTest,
+                                             hasErrors: hasErrors,
+                                             yovayshyAnswers:YovayshyTest.getAnswers()])
         } else {
             testService.persistYovayshy(testProcess)
             testProcess.yovayshyTest = null

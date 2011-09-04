@@ -31,7 +31,7 @@
             <td>
               <g:select
                       name="answer"
-                      from="${IMTest.getIMAnswers()}"
+                      from="${imanswer}"
                       optionKey="id" optionValue="answer"
                       noSelection="${['-10':'Виберіть відповідь...']}"
                       value="${processedQuestion.answer}">
