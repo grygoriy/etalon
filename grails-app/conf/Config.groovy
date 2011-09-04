@@ -53,10 +53,10 @@ environments {
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
-        grails.profiler.disable = true
+//        grails.profiler.disable = true
         log4j = {
-            debug 'org.hibernate.SQL',
-                  'org.hibernate.type'
+//            debug 'org.hibernate.SQL',
+//                  'org.hibernate.type'
 //          'org.hibernate.cache'
 
         }
