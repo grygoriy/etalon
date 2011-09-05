@@ -11,12 +11,16 @@ import grails.plugin.springcache.annotations.Cacheable
 import com.ca.etalon.test.interestmap.IMTest
 import com.ca.etalon.test.actuality.ActualTest
 import com.ca.etalon.test.yovayshy.YovayshyTest
+import com.ca.etalon.result.TestResults
+import com.ca.etalon.validator.IMTestValidator
 
 class TestController {
 
     TestService testService
 
     TestFactoryService testFactoryService
+
+    def imTestValidator
 
     def defaultAction = 'start'
 
@@ -27,13 +31,15 @@ class TestController {
     }
 
     def submitInitials = {
-        def testProcess = new TestProcess()
-        session.test = testProcess;
-        testProcess.userName = params.student
+        TestResults results = new TestResults()
+
+        results.studentName = params.student
         def school = School.findById(params.schoolId)
         if (school != null) {
-            testProcess.school = school
+            results.school = school
             redirect(action: 'interestsMap')
+            results.save()
+            session.testId = results.id
         } else {
             flash.message = 'Виберіть школу'
             render(view: 'start', model: [name: params.student])
@@ -42,9 +48,8 @@ class TestController {
 
     @Cacheable("testPageCache")
     def interestsMap = {
-        if (session.test) {
-            session.test.imTest = testFactoryService.getIMTest()
-            return [imTest: session.test.imTest, imanswer:IMTest.getIMAnswers()]
+        if (session.testId) {
+            return [imTest: testFactoryService.getIMTest(), imanswer:testFactoryService.IMAnswers]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
@@ -53,33 +58,38 @@ class TestController {
     }
 
     def sumbitInterestMap = {
-        TestProcess testProcess = session.test
-        boolean hasErrors = testProcess.imTest.processErrors(params.answer)
+        def processed = testFactoryService.IMTest
+        Map<Long, Integer> answers = [:]
+        params.each {
+            if (it.key.toString().startsWith('answer')) {
+                answers.put(Long.valueOf(it.key.toString().substring(6)), it.value != null ? Integer.valueOf(it.value) : null );
+
+            }
+        }
+
+         boolean hasErrors = imTestValidator.validate(answers, processed.processedQuestions)
         if (hasErrors) {
-            render(view: 'interestsMap', model: [imTest: testProcess,
+            render(view: 'interestsMap', model: [imTest: processed,
                                                  hasErrors: hasErrors,
-                                                 imanswer:IMTest.getIMAnswers()])
+                                                 imanswer:testFactoryService.IMAnswers])
         } else {
-            testService.persistIM(testProcess)
-            testProcess.imTest = null;
+            testService.persistIM(session.testId, processed.processedQuestions)
             redirect(action: 'actuality')
         }
     }
 
     @Cacheable("testPageCache")
     def actuality = {
-        if (session.test) {
-            session.test.actualTest = testFactoryService.actualTest
-            return [actuality: session.test.actualTest, actualityAnswers:ActualTest.getActualityAnswers()]
+        if (session.testId) {
+            return [actuality: testFactoryService.actualTest, actualityAnswers:ActualTest.getActualityAnswers()]
         } else {
-            flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
             null
         }
     }
 
     def submitActuality = {
-        TestProcess testProcess = session.test
+        def process = testFactoryService.actualTest
         boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
         if (hasErrors) {
             render(view: 'actuality', model: [actuality: session.test.actualTest,

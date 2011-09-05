@@ -23,6 +23,7 @@ import static com.ca.etalon.test.motivation.MotivationVector.InternalIndividual
 import static com.ca.etalon.test.motivation.MotivationVector.InternalSocial
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalNegative
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalPositive
+import com.ca.etalon.test.interestmap.IMProcessedQuestion
 
 class TestService {
   static profiled = true
@@ -46,24 +47,11 @@ class TestService {
       testResult.save()
     }
 
-    def persistIM(TestProcess process) {
+    def persistIM(Long id, List<IMProcessedQuestion> questions) {
         TestResults testResult
-        if (process.testResultId != null) {
-          testResult = TestResults.findById(process.testResultId)
-        } else {
-          testResult = new TestResults()
-        }
+        testResult = TestResults.findById(id)
 
-        if (testResult == null) {
-            testResult = new TestResults()
-        }
-
-        testResult.studentName = process.userName
-        testResult.school = process.school
-        testResult.save()
-        process.testResultId = testResult.id
-
-        testResult.imResults = getIMResults(process, testResult)
+        testResult.imResults = getIMResults(questions, testResult)
         testResult.save()
     }
 
@@ -115,11 +103,11 @@ class TestService {
       return ceil - (answer-1)
     }
 
-    private Set<IMResult> getIMResults(TestProcess process, TestResults testResults) {
+    private Set<IMResult> getIMResults(List<IMProcessedQuestion> processedQuestions, TestResults testResults) {
       def imResults = new HashSet()
       def jobNames = JobName.list()
       jobNames.each {jobName ->
-        IMResult imResult = getResultsForCategory(jobName, process)
+        IMResult imResult = getResultsForCategory(jobName, processedQuestions)
         if (imResult.result != 0) {
           imResult.results = testResults
           imResult.save()
@@ -129,8 +117,8 @@ class TestService {
       return imResults
     }
 
-  private IMResult getResultsForCategory(JobName jobName, TestProcess process) {
-    def byCategories = process.imTest.processedQuestions.findAll { it.question.category.id == jobName.id }
+  private IMResult getResultsForCategory(JobName jobName, List<IMProcessedQuestion> processedQuestions) {
+    def byCategories = processedQuestions.findAll { it.question.category.id == jobName.id }
     //todo : try to change it to amount = byCategories.*answer.sum()
     int amount = 0
     byCategories.each {item ->

@@ -16,6 +16,7 @@ import com.ca.etalon.test.interestmap.IMTest
 import com.ca.etalon.tests.interestmap.IMQuestion
 import com.ca.etalon.test.interestmap.IMProcessedQuestion
 import com.ca.etalon.tests.yovayshy.YovayshyQuestion
+import com.ca.etalon.test.IdLabel
 
 class TestFactoryService {
 
@@ -64,5 +65,15 @@ class TestFactoryService {
 
    boolean isTestEnv() {
         Environment.currentEnvironment == Environment.DEVELOPMENT
+    }
+
+    List<IdLabel> getIMAnswers() {
+        [
+          new IdLabel(id:1, answer:'дуже подобається'),
+          new IdLabel(id:2, answer:'подобається'),
+          new IdLabel(id:0, answer:'сумніваюсь'),
+          new IdLabel(id:-1, answer:'не подобається'),
+          new IdLabel(id:-2, answer:'дуже не подобається')
+      ]
     }
 }

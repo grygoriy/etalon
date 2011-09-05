@@ -34,6 +34,7 @@ class TestResults {
         lidershipResult column:'LidershipResultId'
         motivationResult column:'MotivationResultId'
       }
+      cache true
       version false
     }
 

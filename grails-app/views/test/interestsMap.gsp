@@ -30,7 +30,7 @@
             </td>
             <td>
               <g:select
-                      name="answer"
+                      name="answer${processedQuestion.question.id}"
                       from="${imanswer}"
                       optionKey="id" optionValue="answer"
                       noSelection="${['-10':'Виберіть відповідь...']}"
