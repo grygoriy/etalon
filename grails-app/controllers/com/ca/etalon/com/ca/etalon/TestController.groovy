@@ -8,11 +8,12 @@ import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.test.holland.HollandVector
 import com.ca.etalon.tests.TestFactoryService
 import grails.plugin.springcache.annotations.Cacheable
-import com.ca.etalon.test.interestmap.IMTest
+
 import com.ca.etalon.test.actuality.ActualTest
 import com.ca.etalon.test.yovayshy.YovayshyTest
 import com.ca.etalon.result.TestResults
-import com.ca.etalon.validator.IMTestValidator
+
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 
 class TestController {
 
@@ -21,6 +22,14 @@ class TestController {
     TestFactoryService testFactoryService
 
     def imTestValidator
+
+    def actualTestValidator
+
+    def yovayshyTestValidator
+
+    def lidershipTestValidator
+
+    def motivationTestValidator
 
     def defaultAction = 'start'
 
@@ -37,9 +46,10 @@ class TestController {
         def school = School.findById(params.schoolId)
         if (school != null) {
             results.school = school
-            redirect(action: 'interestsMap')
             results.save()
             session.testId = results.id
+            redirect(action: 'interestsMap')
+            return
         } else {
             flash.message = 'Виберіть школу'
             render(view: 'start', model: [name: params.student])
@@ -59,13 +69,7 @@ class TestController {
 
     def sumbitInterestMap = {
         def processed = testFactoryService.IMTest
-        Map<Long, Integer> answers = [:]
-        params.each {
-            if (it.key.toString().startsWith('answer')) {
-                answers.put(Long.valueOf(it.key.toString().substring(6)), it.value != null ? Integer.valueOf(it.value) : null );
-
-            }
-        }
+        Map<Long, Integer> answers = getAnswerMap(params)
 
          boolean hasErrors = imTestValidator.validate(answers, processed.processedQuestions)
         if (hasErrors) {
@@ -81,7 +85,7 @@ class TestController {
     @Cacheable("testPageCache")
     def actuality = {
         if (session.testId) {
-            return [actuality: testFactoryService.actualTest, actualityAnswers:ActualTest.getActualityAnswers()]
+            return [actuality: testFactoryService.actualTest, actualityAnswers:testFactoryService.actualityAnswers]
         } else {
             redirect(controller: 'test', action: 'start')
             null
@@ -89,24 +93,24 @@ class TestController {
     }
 
     def submitActuality = {
-        def process = testFactoryService.actualTest
-        boolean hasErrors = testProcess.actualTest.processErrors(params.answer)
+        def test = testFactoryService.actualTest
+        Map<Long, Integer> answers = getAnswerMap(params)
+
+        boolean hasErrors = actualTestValidator.validate(answers, test.questions)
         if (hasErrors) {
-            render(view: 'actuality', model: [actuality: session.test.actualTest,
+            render(view: 'actuality', model: [actuality: test,
                                               hasErrors: hasErrors,
-                                              actualityAnswers:ActualTest.getActualityAnswers()])
+                                              actualityAnswers:testFactoryService.actualityAnswers])
         } else {
-            testService.persistActualityTest(testProcess)
-            testProcess.actualTest = null
+            testService.persistActualityTest(session.testId, test)
             redirect(action: 'yovayshy')
         }
     }
 
     @Cacheable("testPageCache")
     def yovayshy = {
-        if (session.test) {
-            session.test.yovayshyTest = testFactoryService.yovayshyTest
-            return [yovayshyTest: session.test.yovayshyTest, yovayshyAnswers:YovayshyTest.getAnswers()]
+        if (session.testId) {
+            return [yovayshyTest: testFactoryService.yovayshyTest, yovayshyAnswers:YovayshyTest.getAnswers()]
         } else {
             flash.message = 'Ви повинні почати тест з початку'
             redirect(controller: 'test', action: 'start')
@@ -115,15 +119,16 @@ class TestController {
     }
 
     def submitYovayshy = {
-        TestProcess testProcess = session.test
-        boolean hasErrors = testProcess.yovayshyTest.processErrors(params.answer)
+        def test = testFactoryService.yovayshyTest
+        Map<Long, Integer> answers = getAnswerMap(params)
+
+        boolean hasErrors = yovayshyTestValidator.validate(answers, test.processedQuestions)
         if (hasErrors) {
-            render(view: 'yovayshy', model: [yovayshyTest: session.test.yovayshyTest,
+            render(view: 'yovayshy', model: [yovayshyTest: test,
                                              hasErrors: hasErrors,
                                              yovayshyAnswers:YovayshyTest.getAnswers()])
         } else {
-            testService.persistYovayshy(testProcess)
-            testProcess.yovayshyTest = null
+            testService.persistYovayshy(session.testId, test)
             redirect(action: 'result')
         }
     }
@@ -134,50 +139,40 @@ class TestController {
 
     @Cacheable("testPageCache")
     def lidership = {
-        session.test.lidershipTest = testFactoryService.lidershipTest
-        return [lidership: session.test.lidershipTest]
+        return [lidership: testFactoryService.lidershipTest]
     }
 
     def submitLidership = {
-        TestProcess testProcess = session.test
-        boolean hasErrors = false
-        testProcess.lidershipTest.lidersiprocessQuestions.each {processedQuestion ->
-            String answer = (String) params['answer' + processedQuestion.lidershipQuestion.id]
-            if (answer != null && ['1', '2'].any {it == answer}) {
-                processedQuestion.answer = Integer.valueOf(answer)
-                processedQuestion.errorMessage = ''
-            } else {
-                processedQuestion.errorMessage = 'Вкажіть будь-ласа відповідь'
-                hasErrors = true;
-            }
-        }
+        def test = testFactoryService.lidershipTest
+        Map<Long, Integer> answers = getAnswerMap(params)
+
+        boolean hasErrors = lidershipTestValidator.validate(answers, test.lidersiprocessQuestions)
 
         if (hasErrors) {
-            render(view: 'lidership', model: [lidership: testProcess.lidershipTest, hasErrors: hasErrors])
+            render(view: 'lidership', model: [lidership: test, hasErrors: hasErrors])
         } else {
-            testService.persistLidershipTest(testProcess)
-            session.test.lidershipTest = null;
+            testService.persistLidershipTest(session.testId, test)
             redirect(action: 'motivation')
         }
     }
 
     @Cacheable("testPageCache")
     def motivation = {
-        session.test.motivationTest = testFactoryService.motivationTest
-        return [motivation: session.test.motivationTest]
+        return [motivation: testFactoryService.motivationTest, motivationAnswers: testFactoryService.motivationAnswers]
     }
 
     def submitMotivation = {
-        TestProcess testProcess = session.test
-        MotivationTest motivationTest = testProcess.motivationTest
-        boolean hasErrors = testProcess.motivationTest.processErrors(params.answer)
-        motivationTest.speciality = params.speciality
+        MotivationTest test = testFactoryService.motivationTest
+        Map<Long, Integer> answers = getAnswerMap(params)
+        boolean hasErrors = motivationTestValidator.validate(answers, test.motivationProcessedQuestions)
+        test.speciality = params.speciality
 
         if (hasErrors) {
-            render(view: 'motivation', model: [motivation: motivationTest, hasErrors: hasErrors])
+            render(view: 'motivation', model: [motivation: test
+                                                , hasErrors: hasErrors
+                                                , motivationAnswers: testFactoryService.motivationAnswers])
         } else {
-            testService.persistMotivationTest(testProcess)
-            session.test.motivationTest = null
+            testService.persistMotivationTest(session.testId, test)
             redirect(action: 'holland')
         }
     }
@@ -212,16 +207,24 @@ class TestController {
         for (int i = 0; i <= idMax; i++) {
             String value = (String) params["question$i"]
             if (value != null && value == 'on') {
-                HollandQuestion question = HollandQuestion.findById(i)
-                hollandQuestions.add(question)
+                hollandQuestions << HollandQuestion.findById(i)
             }
         }
-        TestProcess testProcess = session.test
-        testProcess.hollandQuestions = hollandQuestions
 
-        testService.persistHollandTests(testProcess)
-        session.test = null
+        testService.persistHollandTests(session.testId, hollandQuestions)
         redirect(action: 'result')
     }
+
+    private Map<Long, Integer> getAnswerMap(GrailsParameterMap params) {
+        Map<Long, Integer> answers = [:]
+        params.each {
+            if (it.key.toString().startsWith('answer')) {
+                answers.put(Long.valueOf(it.key.toString().substring(6)), it.value != null ? Integer.valueOf(it.value) : null);
+
+            }
+        }
+        return answers
+    }
+
 
 }

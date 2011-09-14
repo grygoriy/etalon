@@ -11,7 +11,7 @@ import com.ca.etalon.tests.lidership.LidershipQuestion
  */
 
 class LidersiProcessQuestion {
-  LidershipQuestion lidershipQuestion;
+  LidershipQuestion question;
   Integer answer;
   String errorMessage;
 }

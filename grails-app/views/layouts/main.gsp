@@ -1,8 +1,10 @@
 <html>
     <head>
         <title><g:layoutTitle default="Grails" /></title>
-        <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'css',file:'base.css')}" />
+        <jawr:style src="css/main.css" media="all"/>
+        <jawr:style src="css/base.css" media="all"/>
+        %{--<link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />--}%
+        %{--<link rel="stylesheet" href="${resource(dir:'css',file:'base.css')}" />--}%
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:layoutHead />
     </head>

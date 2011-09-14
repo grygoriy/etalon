@@ -48,7 +48,7 @@ class TestFactoryService {
   LidershipTest getLidershipTest() {
     def questions = LidershipQuestion.list();
     def processQuestions = questions.collect {
-        new LidersiProcessQuestion(lidershipQuestion:it, answer: isTestEnv() ? 1 : 0)
+        new LidersiProcessQuestion(question:it, answer: isTestEnv() ? 1 : 0)
     }
 
     new LidershipTest(lidersiprocessQuestions:processQuestions)
@@ -57,7 +57,7 @@ class TestFactoryService {
   MotivationTest getMotivationTest() {
     def questions = MotivationQuestion.list()
     def processedQuestions = questions.collect {
-        new MotivationProcessedQuestion(motivationQuestion:it, answer: isTestEnv() ? 1 : 0)
+        new MotivationProcessedQuestion(question:it, answer: isTestEnv() ? 1 : 0)
     }
 
     new MotivationTest(motivationProcessedQuestions:processedQuestions)
@@ -76,4 +76,25 @@ class TestFactoryService {
           new IdLabel(id:-2, answer:'дуже не подобається')
       ]
     }
+
+    List<IdLabel> getActualityAnswers() {
+        [
+            new IdLabel(id: 1, answer: 'не згідна / не згідний'),
+            new IdLabel(id: 2, answer: 'частково не згідна / не згідний'),
+            new IdLabel(id: 3, answer: 'частково  згідна / згідний'),
+            new IdLabel(id: 4, answer: 'згідна / згідний')
+        ]
+
+    }
+
+    List<IdLabel> getMotivationAnswers() {
+        [
+          new IdLabel(id:5, answer:'дуже сильно вплинуло'),
+          new IdLabel(id:4, answer:'сильно'),
+          new IdLabel(id:3, answer:'середньо'),
+          new IdLabel(id:2, answer:'слабо'),
+          new IdLabel(id:1, answer:'ніяк  не вплинуло')
+      ]
+    }
+
 }

@@ -27,9 +27,9 @@ environments {
 	}
 	production {
 		dataSource {
-			url = "jdbc:mysql://mysql.etalon.jelastic.com/etalon?useUnicode=true&characterEncoding=utf-8"
+			url = "jdbc:mysql://mysql.eytalonpro.jelastic.com/etalon?useUnicode=true&characterEncoding=utf-8"
             username = "root"
-            password = "QSrGS3KT8m"
+            password = "8SkN5EYo7i"
 		}
 	}
 }

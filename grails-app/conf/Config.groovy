@@ -92,6 +92,8 @@ log4j = {
     //perfomance plugin
     info  'com.linkedin.grails'
 
+    debug 'com.ca.etalon.com.ca.etalon'
+
 }
 
 // Added by the Spring Security Core plugin:

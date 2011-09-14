@@ -7,6 +7,7 @@ class IMResult {
     JobName category
     Integer result
     TestResults results  
+    Long testResultsId
 
     static mapping = {
       table 'IMResult'
@@ -15,6 +16,7 @@ class IMResult {
         category column:'JobNameId'
         result column:'Result'
         results column:'TestResultsId'
+        results column:'testResultsId'
       }
       version false
     }

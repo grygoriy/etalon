@@ -36,7 +36,7 @@
           Б) ${processedQuestion.question.caseB} <BR/>
         </td>
         <td>
-          <g:select name="answer"
+          <g:select name="answer${processedQuestion.question.id}"
                     from="${yovayshyAnswers}"
                     optionKey="id"
                     optionValue="label"

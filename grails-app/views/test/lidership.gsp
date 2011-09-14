@@ -34,14 +34,14 @@
     <g:each in="${lidership.lidersiprocessQuestions}" var="processedQuestion">
       <tr>
         <td>
-          <p class="floatLeft">${processedQuestion.lidershipQuestion.question}</p>
+          <p class="floatLeft">${processedQuestion.question.question}</p>
         </td>
         <td>
           <%
             String[] labels = new String[2];
-            labels[0] = processedQuestion.lidershipQuestion.caseA
-            labels[1] = processedQuestion.lidershipQuestion.caseB
-            def name = "answer" + processedQuestion.lidershipQuestion.id 
+            labels[0] = processedQuestion.question.caseA
+            labels[1] = processedQuestion.question.caseB
+            def name = "answer" + processedQuestion.question.id
           %>
           <g:radioGroup name="${name}" values="['1','2']" labels="${labels}" value="${processedQuestion.answer}">
             <p> ${it.radio} ${it.label}</p>

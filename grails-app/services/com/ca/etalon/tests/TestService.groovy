@@ -24,54 +24,54 @@ import static com.ca.etalon.test.motivation.MotivationVector.InternalSocial
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalNegative
 import static com.ca.etalon.test.motivation.MotivationVector.ExternalPositive
 import com.ca.etalon.test.interestmap.IMProcessedQuestion
+import org.apache.commons.logging.LogFactory
+import junit.framework.TestResult
 
 class TestService {
   static profiled = true
+  static scope = 'prototype'
+
   boolean transactional = true
+    private static final log = LogFactory.getLog(this)
 
-    void persistMotivationTest(TestProcess testProcess) {
-        def testResult = TestResults.findById(testProcess.testResultId)
-        testResult.motivationResult = getMotivationResult(testProcess)
-        testResult.save()
+    synchronized void persistMotivationTest(Long id, MotivationTest testProcess) {
+        getMotivationResult(id, testProcess)
     }
 
-    void persistLidershipTest(TestProcess testProcess) {
-        def testResult = TestResults.findById(testProcess.testResultId)
-        testResult.lidershipResult = getLidershipResult(testProcess)
-        testResult.save()
+    synchronized void persistLidershipTest(Long id, LidershipTest test) {
+        def lidershipResult = getLidershipResult(test)
+        log.debug("testid: $id lidershipResult $lidershipResult")
+        TestResults.executeUpdate("update TestResults set lidershipResult = :results where id = :id",
+                [results: lidershipResult, id: id])
     }
 
-    void persistHollandTests(TestProcess testProcess) {
-      def testResult = TestResults.findById(testProcess.testResultId)
-      testResult.hollandResults = getHollandResult(testProcess)
-      testResult.save()
+    synchronized void persistHollandTests(Long id, List<HollandQuestion> questions) {
+      getHollandResult(id, questions)
     }
 
-    def persistIM(Long id, List<IMProcessedQuestion> questions) {
-        TestResults testResult
-        testResult = TestResults.findById(id)
-
-        testResult.imResults = getIMResults(questions, testResult)
-        testResult.save()
+    synchronized def persistIM(Long id, List<IMProcessedQuestion> questions) {
+        getIMResults(questions, id)
     }
 
-    def persistActualityTest(TestProcess process) {
-        def testResult = TestResults.findById(process.testResultId)
-        testResult.actualityResults = getActualityResult(process)
-        testResult.save()
+    def synchronized persistActualityTest(Long id, ActualTest actualTest) {
+        def result = getActualityResult(id, actualTest)
+        log.debug("testid: $id ActualityResult $result")
+        TestResults.executeUpdate("update TestResults set actualityResults = :results where id = :id",
+                [results: result, id: id])
     }
 
-    def persistYovayshy(TestProcess process) {
-        def testResult = TestResults.findById(process.testResultId)
-        testResult.yovayshyResult = getYovayshyResult(process)
-        testResult.save()
+    synchronized def persistYovayshy(Long id, YovayshyTest process) {
+        def result = getYovayshyResult(process)
+        log.debug("testid: $id YovayshyResult $result")
+        TestResults.executeUpdate("update TestResults set yovayshyResult = :results where id = :id",
+                [results: result, id: id])
     }
 
 
-    private Integer getActualityResult(TestProcess process) {
+    private synchronized Integer getActualityResult(Long id, ActualTest actualTest) {
       def result = 0;
-      def ceil = ActualTest.actualityAnswers.size()
-      process.actualTest.questions.each {
+      def ceil = actualTest.questions.size()
+      actualTest.questions.each {
         result += it.question.isReverted ? revertAnswer(it.answer, ceil) : it.answer
       }
       return result
@@ -93,7 +93,7 @@ class TestService {
     * Example: Ceil = 4 <BR/>
     *         <ul>
     *           <li>1 -> 4</li>
-    *           <li>2 -> 3</li>
+    *           <li>2    -> 3</li>
     *           <li>3 -> 2</li>
     *           <li>4 -> 1</li>
     *         </ul>
@@ -103,21 +103,20 @@ class TestService {
       return ceil - (answer-1)
     }
 
-    private Set<IMResult> getIMResults(List<IMProcessedQuestion> processedQuestions, TestResults testResults) {
+    private synchronized void getIMResults(List<IMProcessedQuestion> processedQuestions, Long id) {
       def imResults = new HashSet()
       def jobNames = JobName.list()
       jobNames.each {jobName ->
         IMResult imResult = getResultsForCategory(jobName, processedQuestions)
         if (imResult.result != 0) {
-          imResult.results = testResults
-          imResult.save()
-          imResults << imResult
+          imResult.testResultsId = id
+          imResults << imResult.save()
         }
       }
-      return imResults
+
     }
 
-  private IMResult getResultsForCategory(JobName jobName, List<IMProcessedQuestion> processedQuestions) {
+  private synchronized IMResult getResultsForCategory(JobName jobName, List<IMProcessedQuestion> processedQuestions) {
     def byCategories = processedQuestions.findAll { it.question.category.id == jobName.id }
     //todo : try to change it to amount = byCategories.*answer.sum()
     int amount = 0
@@ -128,13 +127,12 @@ class TestService {
     return new IMResult(category: jobName, result: amount)
   }
 
-  private LidershipResult getLidershipResult(TestProcess process) {
-    LidershipTest lidershipTest = process.lidershipTest
+  private synchronized LidershipResult getLidershipResult(LidershipTest lidershipTest) {
     Integer score = 0;
 
     //todo : try to change it to collection summ
     lidershipTest.lidersiprocessQuestions.each {question ->
-      if (question.answer == question.lidershipQuestion.keyCase) {
+      if (question.answer == question.question.keyCase) {
         score += question.answer
       }
 
@@ -154,18 +152,17 @@ class TestService {
     return new LidershipResult(score:score, message:message).save()
   }
 
-  private MotivationResult getMotivationResult(TestProcess process) {
-    MotivationTest motivationTest = process.motivationTest
+  private synchronized MotivationResult getMotivationResult(Long id, MotivationTest motivationTest) {
     List<VectorResult> vectorResults = getVectorResult(motivationTest)
     MotivationResult motivationResult = new MotivationResult(speciality:motivationTest.speciality
-                                                           , vectorResults:vectorResults).save()
+                                                           , vectorResults:vectorResults
+                                                           , testResultsId: id).save()
     return motivationResult
   }
 
 
   @SuppressWarnings('ExplicitHashSetInstantiation')
-  private Set<HollandResult> getHollandResult(TestProcess process) {
-    List<HollandQuestion> hollandQuestions = process.hollandQuestions
+  private synchronized void getHollandResult(Long id, List<HollandQuestion> hollandQuestions) {
     Map<HollandType, Integer> result = [:]
       result.with {
           put(HollandType.Realistic, 0)
@@ -181,19 +178,19 @@ class TestService {
       score++
       result.put(it.type, score)
     }
-
-    def hollandResults = result.entrySet().collect(new HashSet()){new HollandResult(type:it.key,score:it.value).save()}
-    return hollandResults
+    result.entrySet().each {
+            new HollandResult(type:it.key,score:it.value, testResultsId: id).save()
+    }
   }
 
-  private List<VectorResult> getVectorResult(MotivationTest motivationTest) {
+  private synchronized List<VectorResult> getVectorResult(MotivationTest motivationTest) {
     Integer internalIndividual = 0;
     Integer internalSocial = 0;
     Integer externalNegative = 0;
     Integer externalPositive = 0;
 
     motivationTest.motivationProcessedQuestions.each  {
-      switch (it.motivationQuestion.motivationVector) {
+      switch (it.question.motivationVector) {
         case InternalIndividual :
           internalIndividual++;
           break;
@@ -217,11 +214,10 @@ class TestService {
         ]
   }
 
-  private YovayshyResult getYovayshyResult(TestProcess process) {
+  private synchronized YovayshyResult getYovayshyResult(YovayshyTest test) {
     Map<YovayshySphere, Integer> score = [:]
     YovayshySphere.each {score.put(it, 0)}
 
-    YovayshyTest test = process.yovayshyTest
     test.processedQuestions.each {
       YovayshyAnswer answer = YovayshyTest.getAnswerById(it.answer)
       Integer scoreA = score.get(it.question.keyOnA) + answer.scoreA

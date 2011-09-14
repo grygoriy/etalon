@@ -7,7 +7,8 @@ class MotivationResult {
     String speciality;
     static hasMany = [vectorResults:VectorResult]
     TestResults testResults
-  
+    Long testResultsId
+
     static constraints = {
     }
 
@@ -17,6 +18,7 @@ class MotivationResult {
         id column:'MotivationResultId'
         speciality column:'Speciality'
         testResults column:'TestResultsId'
+        testResultsId column:'testResultsId'
       }
       version false
     }

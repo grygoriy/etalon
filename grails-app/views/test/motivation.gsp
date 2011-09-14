@@ -28,12 +28,12 @@
       <g:each in="${motivation.motivationProcessedQuestions}" var="processedQuestion">
           <tr>
             <td>
-              <p class="floatLeft">${processedQuestion.motivationQuestion.question}</p>
+              <p class="floatLeft">${processedQuestion.question.question}</p>
             </td>
             <td>
               <g:select
-                      name="answer"
-                      from="${MotivationTest.getAnswers()}"
+                      name="answer${processedQuestion.question.id}"
+                      from="${motivationAnswers}"
                       optionKey="id" optionValue="answer"
                       noSelection="${['-1':'Виберіть відповідь...']}"
                       value="${processedQuestion.answer}">

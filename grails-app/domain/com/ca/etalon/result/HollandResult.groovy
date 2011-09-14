@@ -7,6 +7,7 @@ class HollandResult {
     HollandType type
     Integer score
     TestResults testResults
+    Long testResultsId
 
     static constraints = {
     }
@@ -18,6 +19,7 @@ class HollandResult {
         score column:'Score'
         type column:'Type', enumType:'string'
         testResults column:'TestResultsId'
+        testResults column:'testResultsId'
       }
       version false
     }

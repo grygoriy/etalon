@@ -11,7 +11,7 @@ import com.ca.etalon.tests.motivation.MotivationQuestion
  */
 
 class MotivationProcessedQuestion {
-  MotivationQuestion motivationQuestion;
+  MotivationQuestion question;
   Integer answer
   String errorMessage
 
