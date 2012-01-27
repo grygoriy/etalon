@@ -2,7 +2,6 @@ package com.ca.etalon.com.ca.etalon
 
 import com.ca.etalon.School
 import com.ca.etalon.tests.TestService
-import com.ca.etalon.util.TestProcess
 import com.ca.etalon.test.motivation.MotivationTest
 import com.ca.etalon.tests.holland.HollandQuestion
 import com.ca.etalon.test.holland.HollandVector

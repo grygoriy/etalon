@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'base.css')}" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:layoutHead />
+        <r:layoutResources />
     </head>
     <body style="margin:20">
     <div id="wrap">
@@ -30,5 +31,6 @@
 	<div id="footer">
 	<p class="copyright">&copy; 2009 Молодіжний громадський центр &laquo;Еталон&raquo;</p>
 	</div>
+    <r:layoutResources />
     </body>	
 </html>
